@@ -1,12 +1,11 @@
 language: cpp
 
-compiler:
-  - clang
-  - gcc
-
 os:
   - linux
   - osx
 
+compiler:
+  - clang
+  - gcc
 
 script: ./travis.sh
