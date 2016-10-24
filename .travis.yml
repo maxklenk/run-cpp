@@ -1,8 +1,10 @@
+sudo: required
+
 language: cpp
 
 os:
   - linux
-  - osx
+#  - osx
 
 compiler:
   - clang
