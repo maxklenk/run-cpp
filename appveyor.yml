@@ -13,6 +13,6 @@ build_script:
   - cd _build
   - cmake ..
   - cmake --build .
-  - cd Debug
+  - cd bin
   - greet_world.exe
 

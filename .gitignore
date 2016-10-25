@@ -30,3 +30,6 @@
 
 # IDE
 .idea
+
+# Custom build folder
+_build
