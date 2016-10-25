@@ -10,4 +10,4 @@ compiler:
   - clang
   - gcc
 
-script: ./travis.sh
+script: ./runAll.sh

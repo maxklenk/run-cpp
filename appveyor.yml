@@ -8,6 +8,5 @@ configuration:
   - Debug
 
 build_script:
-  - cd task1.1
-  - sh runWin.sh
+  - sh runAllWin.sh
 
