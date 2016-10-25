@@ -12,4 +12,4 @@ configuration:
 build_script:
 - ps: |
     cd task1.1
-    g++ greet_world.cpp -o greet_world.exe
+    gcc greet_world.cpp -o greet_world.exe
