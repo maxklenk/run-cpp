@@ -9,10 +9,5 @@ configuration:
 
 build_script:
   - cd task1.1
-  - md _build
-  - cd _build
-  - cmake ..
-  - cmake --build .
-  - cd Debug
-  - greet_world.exe
+  - sh runWin.sh
 
