@@ -1,15 +1,12 @@
 version: '{build}'
 
-os: Visual Studio 2015
-
-platform:
-  - Win32
-  - x64
-
 configuration:
   - Debug
 
 build_script:
-- ps: |
-    cd task1.1
-    gcc greet_world.cpp -o greet_world.exe
+  - cd task1.1
+  - md _build -Force | Out-Null
+  - cd _build
+  - cmake ..
+  - cmake --build .
+
