@@ -4,8 +4,8 @@ platform:
   - Win32
   - x64
 
-#configuration:
-#  - Debug
+configuration:
+  - Debug
 
 build_script:
   - cd task1.1
@@ -13,6 +13,6 @@ build_script:
   - cd _build
   - cmake ..
   - cmake --build .
-  - cd bin
+  - cd Debug
   - greet_world.exe
 
