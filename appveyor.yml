@@ -5,7 +5,7 @@ configuration:
 
 build_script:
   - cd task1.1
-  - md _build -Force | Out-Null
+  - md _build
   - cd _build
   - cmake ..
   - cmake --build .
