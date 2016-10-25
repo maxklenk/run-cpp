@@ -2,5 +2,4 @@ mkdir _build
 cd _build
 cmake ..
 cmake --build .
-cd Debug
-greet_world.exe
+Debug\greet_world.exe
