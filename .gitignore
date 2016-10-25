@@ -33,3 +33,6 @@
 
 # Custom build folder
 _build
+
+# MAC
+.DS_Store

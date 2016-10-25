@@ -1,0 +1,12 @@
+1234567890@example.com
+firstname.lastname@example.com
+email@subdomain.example.com
+firstname-lastname@example.com
+email@example.name
+email@example.com
+plattner@hpi.de
+email@example-one.com
+email@example.web
+email@example.com
+paige@google.com
+email@example.co.jp

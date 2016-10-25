@@ -5,3 +5,8 @@ cd task1.1
 sh run.sh
 cd ..
 
+# project 3
+cd task1.3
+sh run.sh
+cd ..
+
