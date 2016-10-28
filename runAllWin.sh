@@ -10,3 +10,7 @@ cd task1.3
 sh runWin.sh
 cd ..
 
+# project 4
+cd task1.4
+sh runWin.sh
+cd ..
