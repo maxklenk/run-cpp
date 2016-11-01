@@ -59,24 +59,24 @@ int main(int argc, char *argv[]) {
         }
         myfile.close();
 
-        // TODO fails on same word count! use vector instead
-        map<int, string> dst;
-        transform(counter.begin(), counter.end(), inserter(dst, dst.begin()), flip_pair);
+        // sort word counter
+        vector<pair<int, string> > sorted_counter;
+        for (map<string, int>::iterator it = counter.begin(); it != counter.end(); ++it) {
+            sorted_counter.push_back(pair<int, string>(it->second, it->first));
+        }
 
         // sort by counter
-        sort(dst.begin(), dst.end(), [](auto &left, auto &right){
-            return left.first < right.first;
+        sort(sorted_counter.begin(), sorted_counter.end(), [](pair<int, string> &left, pair<int, string> &right){
+            return left.first > right.first;
         });
 
         // print
         int printed = 0;
         int maxCountLength = 4;
-        for (map<int, string>::iterator it = --dst.end(); it != dst.begin() && printed < limit; --it) {
-            for (int c = maxCountLength - to_string(it->first).length(); c > 0; c --) {
-                cout << " "; 
-                // TODO    printf ("Preceding with blanks: %10d \n", 1977);
-            }
-            cout << it->first << " " << it->second << endl;
+
+        for(auto it = sorted_counter.begin(); it != sorted_counter.end() && printed < limit; ++it) {
+            printf ("%5d ", it->first);
+            cout << it->second << endl;
             printed++;
         }
 
