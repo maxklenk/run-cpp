@@ -63,6 +63,11 @@ int main(int argc, char *argv[]) {
         map<int, string> dst;
         transform(counter.begin(), counter.end(), inserter(dst, dst.begin()), flip_pair);
 
+        // sort by counter
+        sort(dst.begin(), dst.end(), [](auto &left, auto &right){
+            return left.first < right.first;
+        });
+
         // print
         int printed = 0;
         int maxCountLength = 4;
