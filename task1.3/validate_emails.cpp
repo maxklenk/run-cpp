@@ -69,6 +69,10 @@ int main(int argc, char * argv[])
 {
     string line;
     list<string> selected_lines;
+
+	/*
+	// looks better for more options, but not supporting windows
+	
 	int option_index = 0;
 
 	// define options and assign them to flags or variables
@@ -80,7 +84,13 @@ int main(int argc, char * argv[])
 	};
 
 	getopt_long (argc, argv, "", long_options, &option_index);
-    
+    */
+
+	if(argc == 2 && strcmp(argv[1], "--print-invalid") == 0)
+	{
+		print_flag = 1;
+	}
+
     // read lines by mode into list
     while (cin >> line)
     {
