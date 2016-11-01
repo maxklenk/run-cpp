@@ -11,12 +11,7 @@ using namespace std;
 regex ws_re("\\s+"); // whitespace
 
 int isNotAlphaNum(char c) {
-    return !isalnum(c); 
-    // TODO check type of apostroph's
-}
-
-pair<int, string> flip_pair(const pair<string, int> &p) {
-    return pair<int, string>(p.second, p.first);
+    return !isalnum(c) && c != '\'';
 }
 
 int main(int argc, char *argv[]) {
@@ -31,7 +26,9 @@ int main(int argc, char *argv[]) {
 
     ifstream myfile("../hgg.txt");
 
-    if (myfile.is_open()) {
+    if (!myfile.is_open()) {
+        cout << "Unable to open file" << endl;
+    } else {
         while (getline(myfile, line)) {
             // replace non alphanumeric
             replace_if(line.begin(), line.end(), isNotAlphaNum, ' ');
@@ -81,9 +78,6 @@ int main(int argc, char *argv[]) {
         }
 
     }
-
-    else cout << "Unable to open file"; 
-    // short error to top
 
     return 0;
 }
