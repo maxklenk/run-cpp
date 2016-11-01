@@ -1,0 +1,26 @@
+Our run script builds, links and runs the files:
+
+mkdir _build
+cd _build
+cmake ..
+cmake --build .
+
+./providerlibtest
+
+(On windows only the execution line has to be relaced with Debug/providerlibtest.exe)
+
+
+The corresponding CMakeLists.txt file looks like this:
+
+cmake_minimum_required (VERSION 3.1)
+project (Task1.2)
+
+add_library (provider provider.cpp)
+
+target_include_directories (provider PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_executable (providerlibtest providerlibtest.cpp)
+
+target_link_libraries (providerlibtest LINK_PUBLIC provider)
+
+target_compile_features(provider PRIVATE cxx_range_for)
+target_compile_features(providerlibtest PRIVATE cxx_range_for)
