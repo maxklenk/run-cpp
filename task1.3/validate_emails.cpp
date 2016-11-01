@@ -6,7 +6,9 @@
 #include <sstream>
 #include <list>
 
+/*
 #include <getopt.h>
+*/
 
 using namespace std;
 
@@ -72,7 +74,7 @@ int main(int argc, char * argv[])
 
 	/*
 	// looks better for more options, but not supporting windows
-	
+
 	int option_index = 0;
 
 	// define options and assign them to flags or variables
