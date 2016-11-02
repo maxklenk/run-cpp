@@ -5,4 +5,4 @@ cd _build
 cmake ..
 cmake --build .
 
-./greet_world
+./businesscard_raytracer > image.ppm
