@@ -8,9 +8,9 @@
 
 using namespace std;
 
-regex ws_re("\\s+"); // whitespace
+const regex ws_re("\\s+"); // whitespace
 
-int isNotAlphaNum(char c) {
+int isNotAlphaNum(const char c) {
     return !isalnum(c) && c != '\'';
 }
 
@@ -20,15 +20,13 @@ int main(int argc, char *argv[]) {
         limit = atoi(argv[1]);
     }
 
-    string line;
-    string word;
-    map<string, int> counter;
-
     ifstream myfile("../hgg.txt");
 
     if (!myfile.is_open()) {
         cout << "Unable to open file" << endl;
     } else {
+        map<string, int> counter;
+        string line;
         while (getline(myfile, line)) {
             // replace non alphanumeric
             replace_if(line.begin(), line.end(), isNotAlphaNum, ' ');
@@ -39,10 +37,9 @@ int main(int argc, char *argv[]) {
             // iterate over words
             sregex_token_iterator it(line.begin(), line.end(), ws_re, -1);
             sregex_token_iterator reg_end;
-
-            // count words if not whitespace
             for (; it != reg_end; ++it) {
-                word = it->str();
+                // count words if not whitespace
+                string word = it->str();
                 // we may have words of spaces
                 if (word.find_first_not_of(' ') != string::npos) {
                     // add or increment word
@@ -69,9 +66,8 @@ int main(int argc, char *argv[]) {
 
         // print
         int printed = 0;
-        int maxCountLength = 4;
-
-        for(auto it = sorted_counter.begin(); it != sorted_counter.end() && printed < limit; ++it) {
+        auto it = sorted_counter.begin();
+        for(; it != sorted_counter.end() && printed < limit; ++it) {
             printf ("%5d ", it->first);
             cout << it->second << endl;
             printed++;
