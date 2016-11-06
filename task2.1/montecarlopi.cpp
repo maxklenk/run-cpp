@@ -1,9 +1,14 @@
 // uniform_real_distribution
 #include <iostream>
 #include <random>
+#include <math.h>
 
+/**
+ * started coding by example from http://www.cplusplus.com/reference/random/uniform_real_distribution/
+ */
 int main(int argc, char *argv[])
 {
+    /*
     const int nrolls = 10000;  // number of experiments
     const int nstars = 95;     // maximum number of stars to distribute
     const int nintervals = 10; // number of intervals
@@ -28,6 +33,49 @@ int main(int argc, char *argv[])
         std::cout << float(i) / nintervals << "-" << float(i + 1) / nintervals << ": ";
         std::cout << std::string(p[i] * nstars / nrolls, '*') << std::endl;
     }
+    */
+
+    const long size = 100000;
+
+    std::vector<std::vector<bool> > matrix (size, std::vector<bool>(size));
+
+    long values_inside = 0;
+
+    for(long i = 0; i< size; i++)
+    {
+        for(long j = 0; j< size; j++)
+        {
+            if(sqrt(double(i)*double(i)+double(j)*double(j)) < size)
+            {
+                matrix[i][j] = true;
+                values_inside++;
+            }
+        }
+    }
+
+/*
+    // show what is 1 and inside the circle
+    for(long i = 0; i<size; i++)
+    {
+        for(long j=0;j<size;j++)
+        {
+            if(matrix[i][j] == true)
+            {
+                std::cout << "1";
+            }
+            else
+            {
+                std::cout << "-";
+            }
+        }
+        std::cout << std::endl;
+    }        
+    std::cout << std::endl;
+    */
+
+    double ratio = ( double(values_inside) / ( double(size) * double(size) ) ) * 4.0;
+
+    std::cout << "Ratio: " << ratio << std::endl;
 
     return 0;
 }
