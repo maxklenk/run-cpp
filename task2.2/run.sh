@@ -3,6 +3,5 @@
 mkdir _build
 cd _build
 cmake ..
-cmake --build .
-
-./businesscard_raytracer > image.ppm
+rm image.ppm
+cmake --build . && ./businesscard_raytracer > image.ppm
