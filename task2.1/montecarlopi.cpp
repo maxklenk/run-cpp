@@ -13,32 +13,41 @@ int main(int argc, char *argv[]) {
     long inside = 0, outside = 0;
     double ratio;
 
-    struct point2d {
+    struct Point2d {
+
         num_type x;
         num_type y;
-    } point;
+
+        num_type dist() {
+            return std::sqrt((x * x) + (y * y));
+        }
+
+    };
 
     int steps;
     while (steps != 10000) {
 
-        num_type num = distribution(generator);
-        std::cout << "num is " << num;
+        Point2d point {distribution(generator), distribution(generator)};
 
-        if (std::sqrt(num * num) < 1) {
+        std::cout << "point is x: " << point.x << " y:" << point.y << std::endl;
+        std::cout << "dist is " << point.dist() << " less 1? " << (point.dist() < 1.0 ? " true" : " false") << std::endl;
+
+        if (point.dist() < 1.0) {
             inside++;
         } else {
             outside++;
         }
 
-        ratio = double(inside + outside) / inside;
-        std::cout << "ratio is " << ratio << std::endl;
+        ratio =  4.0 * double(inside) / ( double(inside) + double(outside) );
+        std::cout << "inside: " << inside << " outside: " << outside << " ratio is " << ratio << std::endl;
 
         if (ratio > 3.1413 && ratio < 3.1419) {
+            std::cout << "PI sucks! ";
             break;
         }
         steps++;
     }
-    std::cout << "steps is " << steps << std::endl;
+    std::cout << "steps: " << steps << std::endl;
 }
 
 
