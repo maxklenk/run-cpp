@@ -3,79 +3,43 @@
 #include <random>
 #include <math.h>
 
-/**
- * started coding by example from http://www.cplusplus.com/reference/random/uniform_real_distribution/
- */
-int main(int argc, char *argv[])
-{
-    /*
-    const int nrolls = 10000;  // number of experiments
-    const int nstars = 95;     // maximum number of stars to distribute
-    const int nintervals = 10; // number of intervals
+typedef double num_type;
+
+int main(int argc, char *argv[]) {
 
     std::default_random_engine generator;
-    std::uniform_real_distribution<double> distribution(0.0, 1.0);
+    std::uniform_real_distribution <num_type> distribution(0.0, 1.0);
 
-    int p[nintervals] = {};
+    long inside = 0, outside = 0;
+    double ratio;
 
-    for (int i = 0; i < nrolls; ++i)
-    {
-        double number = distribution(generator);
-        ++p[int(nintervals * number)];
-    }
+    struct point2d {
+        num_type x;
+        num_type y;
+    } point;
 
-    std::cout << "uniform_real_distribution (0.0,1.0):" << std::endl;
-    std::cout << std::fixed;
-    std::cout.precision(1);
+    int steps;
+    while (steps != 10000) {
 
-    for (int i = 0; i < nintervals; ++i)
-    {
-        std::cout << float(i) / nintervals << "-" << float(i + 1) / nintervals << ": ";
-        std::cout << std::string(p[i] * nstars / nrolls, '*') << std::endl;
-    }
-    */
+        num_type num = distribution(generator);
+        std::cout << "num is " << num;
 
-    const long size = 100000;
-
-    std::vector<std::vector<bool> > matrix (size, std::vector<bool>(size));
-
-    long values_inside = 0;
-
-    for(long i = 0; i< size; i++)
-    {
-        for(long j = 0; j< size; j++)
-        {
-            if(sqrt(double(i)*double(i)+double(j)*double(j)) < size)
-            {
-                matrix[i][j] = true;
-                values_inside++;
-            }
+        if (std::sqrt(num * num) < 1) {
+            inside++;
+        } else {
+            outside++;
         }
-    }
 
-/*
-    // show what is 1 and inside the circle
-    for(long i = 0; i<size; i++)
-    {
-        for(long j=0;j<size;j++)
-        {
-            if(matrix[i][j] == true)
-            {
-                std::cout << "1";
-            }
-            else
-            {
-                std::cout << "-";
-            }
+        ratio = double(inside + outside) / inside;
+        std::cout << "ratio is " << ratio << std::endl;
+
+        if (ratio > 3.1413 && ratio < 3.1419) {
+            break;
         }
-        std::cout << std::endl;
-    }        
-    std::cout << std::endl;
-    */
-
-    double ratio = ( double(values_inside) / ( double(size) * double(size) ) ) * 4.0;
-
-    std::cout << "Ratio: " << ratio << std::endl;
-
-    return 0;
+        steps++;
+    }
+    std::cout << "steps is " << steps << std::endl;
 }
+
+
+
