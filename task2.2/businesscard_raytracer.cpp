@@ -2,6 +2,23 @@
 #include <stdio.h>
 #include <math.h>
 
+constexpr int imageSize = 512;
+
+constexpr int width = 14;
+constexpr int height = 6;
+
+constexpr int spaceBottom = 5;
+constexpr int spaceRight = 3;
+constexpr int spaceFront = 0;
+
+constexpr bool image[height][width] = {
+        {1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1},
+        {1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1},
+        {1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0},
+        {1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0},
+        {1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1},
+        {1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1}
+};
 
 struct vector {
     float x, y, z;
@@ -14,49 +31,33 @@ struct vector {
         z = c;
     }
 
-    // Sum of two vectors
-    vector operator+(vector r) {
-        return vector(x + r.x, y + r.y, z + r.z);
-    }
 
     // Change vector length
     vector operator*(float r) {
         return vector(x * r, y * r, z * r);
     }
 
+    // Sum of two vectors
+    vector combine(vector r) {
+        return vector(x + r.x, y + r.y, z + r.z);
+    }
 
-    // TODO: these operators may not be used in their original usage, find named functions for them
-    // some kind of distance https://en.wikipedia.org/wiki/Dot_product
-    float operator%(vector r) {
+    // Dot Product: https://en.wikipedia.org/wiki/Dot_product
+    float dotProduct(vector r) {
         return x * r.x + y * r.y + z * r.z;
     }
 
-    // ?
-    vector operator^(vector r) {
+    // Cross product
+    vector crossProduct(vector r) {
         return vector(y * r.z - z * r.y, z * r.x - x * r.z, x * r.y - y * r.x);
     }
 
-    // ?
-    vector operator!() {
-        return *this * (float) (1 / sqrt(*this % *this));
+    // Normalize
+    vector normalize() {
+        return *this * (float) (1 / sqrt((*this).dotProduct(*this)));
     }
+
 };
-
-constexpr int imageSize = 512;
-constexpr int width = 14;
-constexpr int height = 6;
-// int representation
-constexpr int G[] = {8853, 8853, 8946, 10898, 13973, 8805};
-// bit representation
-//constexpr bool image[height][width] = {
-//        {1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1},
-//        {1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1},
-//        {1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0},
-//        {1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0},
-//        {1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1},
-//        {1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1}
-//};
-
 
 float get_random() {
     return (float) rand() / RAND_MAX;
@@ -76,13 +77,13 @@ int Tracer(vector vecO, vector vecD, float &t, vector &vecN) {
     for (int k = width - 1; k >= 0; --k) {
         for (int j = height - 1; j >= 0; --j) {
 
-            // TODO: access image matrix instead
-            if (G[j] & 1 << k) {
+            if (image[height - j - 1][width - k - 1]) {
 
-                vector vecP = vecO + vector((float) -k, 0.0f, (float) -j - 4);
+                vector vecX = vector((float) -k - spaceRight, (float) spaceFront, (float) -j - spaceBottom);
+                vector vecP = vecO.combine(vecX);
 
-                float b = vecP % vecD;
-                float c = vecP % vecP - 1;
+                float b = vecP.dotProduct(vecD);
+                float c = vecP.dotProduct(vecP) - 1;
                 float q = b * b - c;
 
                 if (q > 0) {
@@ -90,7 +91,7 @@ int Tracer(vector vecO, vector vecD, float &t, vector &vecN) {
 
                     if (s < t && s > .01) {
                         t = s;
-                        vecN = !(vecP + vecD * t);
+                        vecN = vecP.combine(vecD * t).normalize();
                         result = 2;
                     }
                 }
@@ -110,16 +111,16 @@ vector Sampler(vector vecA, vector vecB) {
         return vector(0.7f, 0.6f, 1.0f) * (float) pow(1 - vecB.z, 4);
     }
 
-    vector vecD = vecA + vecB * t;
-    vector vecE = !(vector(9 + get_random(), 9 + get_random(), 16) + vecD * -1);
-    vector vecF = vecB + vecC * (vecC % vecB * -2);
-    float b = vecE % vecC;
+    vector vecD = vecA.combine(vecB * t);
+    vector vecE = vector(9 + get_random(), 9 + get_random(), 16).combine(vecD * -1).normalize();
+    vector vecF = vecB.combine(vecC * (vecC.dotProduct(vecB) * -2));
+    float b = vecE.dotProduct(vecC);
 
     if (b < 0 || Tracer(vecD, vecE, t, vecC)) {
         b = 0;
     }
 
-    float p = (float) pow(vecE % vecF * (float) (b > 0), 99);
+    float p = (float) pow(vecE.dotProduct(vecF) * (float) (b > 0), 99);
     if (m & 1) {
         vecD = vecD * 0.2f;
 
@@ -131,29 +132,35 @@ vector Sampler(vector vecA, vector vecB) {
         }
         return vecResult * (b * 0.2f + 0.1f);
     }
-    return vector(p, p, p) + Sampler(vecD, vecF) * 0.5;
+    return vector(p, p, p).combine(Sampler(vecD, vecF) * 0.5);
 }
 
 
 int main(int argc, char *argv[]) {
     // header
-    printf("P6 512 512 255 "); // TODO: use image size variable
+    printf("P6 %i %i 255 ", imageSize, imageSize);
 
-    vector vecH = !vector(-6, -16, 0);
-    vector vecI = !(vector(0, 0, 1) ^ vecH) * 0.002f;
-    vector vecJ = !(vecH ^ vecI) * 0.002f;
-    vector vecK = (vecI + vecJ) * -256 + vecH;
+    // initialization
+    vector vecH = vector(-6, -16, 0).normalize();
+    vector vecI = vector(0, 0, 1).crossProduct(vecH).normalize() * 0.002f;
+    vector vecJ = vecH.crossProduct(vecI).normalize() * 0.002f;
+    vector vecK = vecH.combine(vecI.combine(vecJ) * -256);
+    vector vecX = vector(17, 16, 8);
 
+    // paint each pixel
     for (int y = imageSize; y--;) {
         for (int x = imageSize; x--;) {
 
             vector vecResult = vector(13, 13, 13);
 
             for (int r = 64; r--;) {
-                vector vecM = vecI * (float) (get_random() - 0.5) * 99 + vecJ * (float) (get_random() - 0.5) * 99;
-                vector vecN = vector(17, 16, 8) + vecM;
-                vector vecO = !(vecM * -1 + (vecI * (get_random() + x) + vecJ * (y + get_random()) + vecK) * 16);
-                vecResult = Sampler(vecN, vecO) * 3.5 + vecResult;
+                vector vecA = vecI * 99.0f * (get_random() - 0.5);
+                vector vecB = vecJ * 99.0f * (get_random() - 0.5);
+                vector vecM = vecA.combine(vecB);
+                vector vecN = vecX.combine(vecM);
+                vector vecC = vecK.combine(vecJ * (y + get_random())).combine(vecI * (get_random() + x));
+                vector vecO = (vecM * -1).combine(vecC * 16).normalize();
+                vecResult = vecResult.combine(Sampler(vecN, vecO) * 3.5f);
             }
 
             printf("%c%c%c", (int) vecResult.x, (int) vecResult.y, (int) vecResult.z);
