@@ -154,8 +154,8 @@ int main(int argc, char *argv[]) {
             vector vecResult = vector(13, 13, 13);
 
             for (int r = 64; r--;) {
-                vector vecA = vecI * (float) 99 * (get_random() - 0.5);
-                vector vecB = vecJ * (float) 99 * (get_random() - 0.5);
+                vector vecA = vecI * (float) (get_random() - 0.5) * 99;
+                vector vecB = vecJ * (float) (get_random() - 0.5) * 99;
                 vector vecM = vecA.combine(vecB);
                 vector vecN = vecX.combine(vecM);
                 vector vecC = vecK.combine(vecJ * (y + get_random())).combine(vecI * (get_random() + x));
