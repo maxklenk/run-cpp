@@ -3,19 +3,32 @@
 #include <random>
 #include <math.h>
 #include <typeinfo>
+#include <chrono>
 
-typedef double num_type;
+// define current number type
+typedef float num_type;
+//typedef double num_type;
 //typedef long double num_type;
-//typedef float num_type;
+
+// change random number generation
+//#define RANDOM_NUMBERS 1;
 
 int main(int argc, char *argv[]) {
 
+#ifdef RANDOM_NUMBERS
+    // time dependent random value (will result in changing values)
+    std::mt19937_64 generator;
+    uint64_t timeSeed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    std::seed_seq ss{uint32_t(timeSeed & 0xffffffff), uint32_t(timeSeed>>32)};
+    generator.seed(ss);
+    std::cout << "use time dependend random" << std::endl;
+#else
+    // default random (will result in fixed numbers)
     std::default_random_engine generator;
-    std::uniform_real_distribution <num_type> distribution(0.0, 1.0);
+    std::cout << "use default random engine" << std::endl;
+#endif
 
-    long inside = 0;
-    long outside = 0;
-    num_type ratio;
+    std::uniform_real_distribution <num_type> distribution(0.0, 1.0);
 
     struct Point2d {
 
@@ -27,6 +40,10 @@ int main(int argc, char *argv[]) {
         }
 
     };
+
+    int inside = 0;
+    int outside = 0;
+    num_type ratio;
 
     int steps = 0;
     int inRange = 0;
@@ -49,7 +66,6 @@ int main(int argc, char *argv[]) {
         }
 
         steps++;
-
     }
 
     std::cout.precision(128);
