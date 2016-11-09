@@ -119,7 +119,7 @@ vector Sampler(vector vecA, vector vecB) {
         b = 0;
     }
 
-    float p = pow(vecE % vecF * (float) (b > 0), 99);
+    float p = (float) pow(vecE % vecF * (float) (b > 0), 99);
     if (m & 1) {
         vecD = vecD * 0.2f;
 
