@@ -38,7 +38,7 @@ struct vector {
 
     // ?
     vector operator!() {
-        return *this * (1 / sqrt(*this % *this));
+        return *this * (float) (1 / sqrt(*this % *this));
     }
 };
 
@@ -79,14 +79,14 @@ int Tracer(vector vecO, vector vecD, float &t, vector &vecN) {
             // TODO: access image matrix instead
             if (G[j] & 1 << k) {
 
-                vector vecP = vecO + vector(-k, 0, -j - 4);
+                vector vecP = vecO + vector((float) -k, 0.0f, (float) -j - 4);
 
                 float b = vecP % vecD;
                 float c = vecP % vecP - 1;
                 float q = b * b - c;
 
                 if (q > 0) {
-                    float s = -b - sqrt(q);
+                    float s = (float) (-b - sqrt(q));
 
                     if (s < t && s > .01) {
                         t = s;
@@ -107,7 +107,7 @@ vector Sampler(vector vecA, vector vecB) {
     int m = Tracer(vecA, vecB, t, vecC);
 
     if (!m) {
-        return vector(.7, .6, 1) * pow(1 - vecB.z, 4);
+        return vector(0.7f, 0.6f, 1.0f) * (float) pow(1 - vecB.z, 4);
     }
 
     vector vecD = vecA + vecB * t;
@@ -119,9 +119,9 @@ vector Sampler(vector vecA, vector vecB) {
         b = 0;
     }
 
-    float p = pow(vecE % vecF * (b > 0), 99);
+    float p = pow(vecE % vecF * (float) (b > 0), 99);
     if (m & 1) {
-        vecD = vecD * .2;
+        vecD = vecD * 0.2f;
 
         vector vecResult;
         if ((int) (ceil(vecD.x) + ceil(vecD.y)) & 1) {
@@ -129,7 +129,7 @@ vector Sampler(vector vecA, vector vecB) {
         } else {
             vecResult = vector(3, 3, 3);
         }
-        return vecResult * (b * .2 + .1);
+        return vecResult * (b * 0.2f + 0.1f);
     }
     return vector(p, p, p) + Sampler(vecD, vecF) * 0.5;
 }
@@ -140,8 +140,8 @@ int main(int argc, char *argv[]) {
     printf("P6 512 512 255 "); // TODO: use image size variable
 
     vector vecH = !vector(-6, -16, 0);
-    vector vecI = !(vector(0, 0, 1) ^ vecH) * .002;
-    vector vecJ = !(vecH ^ vecI) * .002;
+    vector vecI = !(vector(0, 0, 1) ^ vecH) * 0.002f;
+    vector vecJ = !(vecH ^ vecI) * 0.002f;
     vector vecK = (vecI + vecJ) * -256 + vecH;
 
     for (int y = imageSize; y--;) {
@@ -150,7 +150,7 @@ int main(int argc, char *argv[]) {
             vector vecResult = vector(13, 13, 13);
 
             for (int r = 64; r--;) {
-                vector vecM = vecI * (get_random() - 0.5) * 99 + vecJ * (get_random() - 0.5) * 99;
+                vector vecM = vecI * (float) (get_random() - 0.5) * 99 + vecJ * (float) (get_random() - 0.5) * 99;
                 vector vecN = vector(17, 16, 8) + vecM;
                 vector vecO = !(vecM * -1 + (vecI * (get_random() + x) + vecJ * (y + get_random()) + vecK) * 16);
                 vecResult = Sampler(vecN, vecO) * 3.5 + vecResult;

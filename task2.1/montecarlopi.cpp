@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 
     };
 
-    int steps;
+    int steps = 0;
     while (steps != 10000) {
 
         Point2d point {distribution(generator), distribution(generator)};
