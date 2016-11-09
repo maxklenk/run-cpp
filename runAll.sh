@@ -10,3 +10,9 @@ cd ..
 cd task2.2
 sh run.sh
 cd ..
+
+
+# project 3
+cd task2.3
+sh run.sh
+cd ..
