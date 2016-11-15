@@ -1,0 +1,6 @@
+Text write: 1358 ms
+Text read: 1311 ms
+Text correct: yes
+Binary write: 0 ms
+Binary read: 0 ms
+Binary correct: no
