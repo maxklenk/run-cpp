@@ -18,22 +18,20 @@ std::string parseValue(const Value value) {
 }
 
 void writeText(const FileContent &content, const std::string &filename) {
-    std::ofstream myfile;
-    myfile.open(filename);
-
-    // One empty line marks the beginning of the raw data section.
-    myfile << "\n";
+    std::ofstream myfile(filename);
 
     // each line contains the key-value pair
     auto header = content.header();
     for (auto const &line: header) {
-        myfile << line.first << "=" << parseValue(line.second) << "\n";
+        myfile << line.first << "=" << parseValue(line.second) << std::endl;
     }
 
+    // One empty line marks the beginning of the raw data section.
+    myfile << std::endl;
+
     // body
-    auto body = content.body();
-    for (auto const &line: body) {
-        myfile << line << "\n";
+    for (const auto &data: content.body()) {
+        myfile << data;
     }
 
     myfile.close();
@@ -43,13 +41,16 @@ FileContent readText(const std::string &filename, bool skipHeader) {
     std::string line;
     std::ifstream myfile(filename);
     FileContent fileContent = FileContent();
-    std::vector<char> body = {};
-    bool first = true;
+    FileContent::Body body;
 
     if (myfile.is_open()) {
         while (std::getline(myfile, line)) {
             auto length = line.length();
-            if (length > 1) {
+            if (length == 0) {
+                skipHeader = true;
+                break;
+            }
+            if (!skipHeader) {
                 auto index = line.find("=");
 
                 const std::string key = line.substr(0, index);
@@ -57,7 +58,7 @@ FileContent readText(const std::string &filename, bool skipHeader) {
 
                 switch (valueString[0]) {
                     case '"':
-                        fileContent.addHeaderItem(key, Value(valueString.substr(1, valueString.length()-2)));
+                        fileContent.addHeaderItem(key, Value(valueString.substr(1, valueString.length() - 2)));
                         break;
                     case 'f':
                         fileContent.addHeaderItem(key, Value(false));
@@ -66,7 +67,7 @@ FileContent readText(const std::string &filename, bool skipHeader) {
                         fileContent.addHeaderItem(key, Value(true));
                         break;
                     default :
-                        if (valueString.find(".") !=std::string::npos) {
+                        if (valueString.find(".") != std::string::npos) {
                             // contains dot
                             float num = std::stod(valueString);
                             fileContent.addHeaderItem(key, Value(num));
@@ -76,18 +77,16 @@ FileContent readText(const std::string &filename, bool skipHeader) {
                             fileContent.addHeaderItem(key, Value(num));
                         }
                 }
-            } else {
-                if (first) {
-                    first = false;
-                } else {
-                    // TODO: body parsing does not work
-                    body.push_back(line[0]);
-                }
             }
         }
+        char c;
+        while(myfile.get(c)){
+            body.push_back(c);
+        }
+        fileContent.setBody(body);
+
         myfile.close();
     }
 
-    fileContent.setBody(body);
     return fileContent;
 }
