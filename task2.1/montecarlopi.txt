@@ -1,0 +1,13 @@
+Amounts of iterations based on different types using uniform_real_distribution and default_random_engine:
+
+  TYPE (Bytes)   ITERATIONS  PI-VALUE
+- float (4)        12914318  3.1418941020965576171875
+- double (8)        1843242  3.141853321484644911976147341192699968814849853515625
+- long double (16)   299901  3.141663415593812624937442024020128883421421051025390625
+
+How many bits of mantissa in a floating-point number are necessary to encode the first 20 decimal digits of π?
+ To represent 14159265358979323846 with base 2 we need 64 digits:
+ 1100010001111111110100001101001100110010011101001101011111000110
+
+
+
