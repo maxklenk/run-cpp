@@ -10,22 +10,26 @@
 #include <list>
 
 
-Graph * GraphFactory::createLinearGraph(std::int32_t numVertices, std::int32_t idOffset)
+std::shared_ptr<Graph> GraphFactory::createLinearGraph(std::int32_t numVertices, std::int32_t idOffset)
 {
-    auto graph = new Graph{};
+    std::unique_ptr<Graph> graph =std::make_unique<Graph>();
     for (auto i = std::int32_t{0}; i < numVertices; ++i)
     {
-        graph->addVertex(new Vertex{i + idOffset});
+        std::int32_t num = i + idOffset;
+        auto ver1 = new Vertex(num);
+//        std::unique_ptr<Vertex> ver1(nullptr);
+//        ver1 = std::make_unique<Vertex>(num);
+        graph->addVertex(ver1);
     }
     for (auto i = std::int32_t{1}; i < numVertices; ++i)
     {
         graph->addEdge(new Edge{graph->vertices()[i - 1], graph->vertices()[i], 1});
     }
-    return graph;
+    return std::shared_ptr<Graph>(std::move(graph));
 }
 
 
-Graph * GraphFactory::createCircularGraph(std::int32_t numVertices, std::int32_t idOffset)
+std::shared_ptr<Graph> GraphFactory::createCircularGraph(std::int32_t numVertices, std::int32_t idOffset)
 {
     auto graph = createLinearGraph(numVertices, idOffset);
     graph->addEdge(new Edge{graph->vertices().back(), graph->vertices().front(), 1});
@@ -33,26 +37,26 @@ Graph * GraphFactory::createCircularGraph(std::int32_t numVertices, std::int32_t
 }
 
 
-Graph * GraphFactory::createTree(std::int32_t numChildren, std::int32_t idOffset)
+std::shared_ptr<Graph> GraphFactory::createTree(std::int32_t numChildren, std::int32_t idOffset)
 {
-    auto graph = new Graph{};
+    std::unique_ptr<Graph> graph =std::make_unique<Graph>();
     graph->addVertex(new Vertex{idOffset});
     for (auto i = std::int32_t{0}; i < numChildren; ++i)
     {
         graph->addVertex(new Vertex{idOffset + i + 1});
         graph->addEdge(new Edge{graph->vertices().front(), graph->vertices().back(), 1});
     }
-    return graph;
+    return std::shared_ptr<Graph>(std::move(graph));
 }
 
 
-Graph * GraphFactory::createRandomGraph(std::int32_t numVertices, std::int32_t idOffset)
+std::shared_ptr<Graph> GraphFactory::createRandomGraph(std::int32_t numVertices, std::int32_t idOffset)
 {
     // Edge id for the purpose of creating a map/set
     using EdgeId = std::pair<std::int32_t, std::int32_t>;
     auto makeId = [](Edge * edge) { return std::make_pair(edge->v0()->id(), edge->v1()->id()); };
 
-    auto graph = new Graph{};
+    std::unique_ptr<Graph> graph =std::make_unique<Graph>();
     auto prng = std::mt19937{42}; // fixed seed
 
     // generate vertices
@@ -89,11 +93,11 @@ Graph * GraphFactory::createRandomGraph(std::int32_t numVertices, std::int32_t i
         }
     }
 
-    return graph;
+    return std::shared_ptr<Graph>(std::move(graph));
 }
 
 
-Graph * GraphFactory::createCityDistanceGraph()
+std::shared_ptr<Graph> GraphFactory::createCityDistanceGraph()
 {
     static const auto N = std::int32_t{20};
     static const auto weightsTable = std::array<int, N * N>{
@@ -119,11 +123,11 @@ Graph * GraphFactory::createCityDistanceGraph()
         398, 237, 510, 123, 218, 371, 101, 51, 70, 150, 434, 334, 151, 370, 84, 61, 85, 62, 142, -1
     };
 
-    auto graph = new Graph{};
+    std::unique_ptr<Graph> graph =std::make_unique<Graph>();
 
     //
     // TODO: implement graph generation from weight matrix
     //
 
-    return graph;
+    return std::shared_ptr<Graph>(std::move(graph));
 }

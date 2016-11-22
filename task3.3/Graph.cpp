@@ -102,7 +102,7 @@ void Graph::addEdge(Edge * edge)
 }
 
 
-void Graph::merge(Graph * g2)
+void Graph::merge(std::shared_ptr<Graph> g2)
 {
     // Edge id for the purpose of creating a map/set
     using EdgeId = std::pair<std::int32_t, std::int32_t>;
@@ -123,7 +123,7 @@ void Graph::merge(Graph * g2)
     }
 
     // merge vertices
-    for (const auto & vertex : g2->m_vertices)
+    for (const auto & vertex : g2->vertices())
     {
         if (vertexMap.find(vertex->id()) == vertexMap.end())
         {
@@ -133,7 +133,7 @@ void Graph::merge(Graph * g2)
     }
 
     // merge edges
-    for (const auto & edge : g2->m_edges)
+    for (const auto & edge : g2->edges())
     {
         if (edgeSet.find(makeId(edge)) == edgeSet.end())
         {
@@ -147,19 +147,19 @@ void Graph::merge(Graph * g2)
         }
     }
 
-    delete g2;
+    g2.reset();
 }
 
 
-Graph * Graph::minimumSpanningTree() const
+std::shared_ptr<Graph> Graph::minimumSpanningTree() const
 {
-    auto mst = new Graph{};
+    std::unique_ptr<Graph> graph =std::make_unique<Graph>();
 
     //
     // TODO: implement minimum spanning tree computation
     //
 
-    return mst;
+    return std::shared_ptr<Graph>(std::move(graph));
 }
 
 

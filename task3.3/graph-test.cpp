@@ -29,9 +29,9 @@ void test()
 
     auto g6 = GraphFactory::createCityDistanceGraph();
     auto g7 = g6->minimumSpanningTree();
-
-    const auto totalWeight = std::accumulate(g7->edges().cbegin(), g7->edges().cend(), 0, [](const auto & sum, const auto & edge) { return sum + edge->weight();  });
-    std::cout << "Shortest route: " << totalWeight << std::endl;
+//
+//    const auto totalWeight = std::accumulate(g7->edges().cbegin(), g7->edges().cend(), 0, [](const auto & sum, const auto & edge) { return sum + edge->weight();  });
+//    std::cout << "Shortest route: " << totalWeight << std::endl;
 }
 
 
