@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <tuple>
 
 constexpr int imageSize = 512;
 
@@ -18,37 +19,39 @@ constexpr bool image[height][width] = {
         {1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0},
         {1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1},
         {1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1}
-};
+}; // TODO use binary literals
 
 struct vector {
     float x, y, z;
 
-    vector() {}
+    vector() : x(0), y(0), z(0) {}
 
-    vector(float a, float b, float c) {
-        x = a;
-        y = b;
-        z = c;
+    vector(const float a, const float b, const float c)
+            : x(a),
+              y(b),
+              z(c) {
     }
 
 
     // Change vector length
-    vector operator*(float r) {
+    vector operator*(float r) const {
         return vector(x * r, y * r, z * r);
     }
 
     // Sum of two vectors
-    vector combine(vector r) {
+    // TODO change to operator+
+    vector combine(vector r) const //
+    {
         return vector(x + r.x, y + r.y, z + r.z);
     }
 
     // Dot Product: https://en.wikipedia.org/wiki/Dot_product
-    float dotProduct(vector r) {
+    float dotProduct(vector r) const {
         return x * r.x + y * r.y + z * r.z;
     }
 
     // Cross product
-    vector crossProduct(vector r) {
+    vector crossProduct(vector r) const {
         return vector(y * r.z - z * r.y, z * r.x - x * r.z, x * r.y - y * r.x);
     }
 
@@ -60,12 +63,15 @@ struct vector {
 };
 
 float get_random() {
-    return (float) rand() / RAND_MAX;
+    return (float) rand() / RAND_MAX; // TODO std::RANDOM interface
 }
 
+//std::tuple<int,float,vector> Tracer(vector vecO, vector vecD) {
 int Tracer(vector vecO, vector vecD, float &t, vector &vecN) {
     t = 1e9;
+    //float t = 1e9;
     int result = 0;
+    //vector vecN;
 
     float p = -vecO.z / vecD.z;
     if (.01 < p) {
@@ -98,14 +104,15 @@ int Tracer(vector vecO, vector vecD, float &t, vector &vecN) {
             }
         }
     }
-
     return result;
+//    return {result,vecN,t};
 }
 
 vector Sampler(vector vecA, vector vecB) {
     float t;
     vector vecC;
     int m = Tracer(vecA, vecB, t, vecC);
+    //std::tie(vecA,t,vecC) = Tracer(vecA, vecB);
 
     if (!m) {
         return vector(0.7f, 0.6f, 1.0f) * (float) pow(1 - vecB.z, 4);
@@ -138,8 +145,8 @@ vector Sampler(vector vecA, vector vecB) {
 
 int main(int argc, char *argv[]) {
     // header
-    printf("P6 %i %i 255 ", imageSize, imageSize);
-
+    printf("P6 %i %i 255 ", imageSize, imageSize); // TODO use cout
+    // TODO use auto sometimes... (modulo)
     // initialization
     vector vecH = vector(-6, -16, 0).normalize();
     vector vecI = vector(0, 0, 1).crossProduct(vecH).normalize() * 0.002f;
