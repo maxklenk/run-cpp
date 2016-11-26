@@ -122,9 +122,17 @@ std::shared_ptr <Graph> GraphFactory::createCityDistanceGraph() {
 
     std::unique_ptr <Graph> graph = std::make_unique<Graph>();
 
-    //
-    // TODO: implement graph generation from weight matrix
-    //
+    // add the nodes
+    for (auto i = std::int32_t{0}; i < N; ++i) {
+        graph->addVertex(std::make_shared<Vertex>(i));
+    }
+
+    // add weighted edges
+    for (auto i = std::int32_t{0}; i < N; ++i) {
+        for (auto j = std::int32_t{i + 1}; j < N; ++j) {
+            graph->addEdge(std::make_shared<Edge>(graph->vertices()[i], graph->vertices()[j], weightsTable[i * N + j]));
+        }
+    }
 
     return std::shared_ptr<Graph>(std::move(graph));
 }
