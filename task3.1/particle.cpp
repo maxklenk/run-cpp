@@ -12,61 +12,45 @@ namespace
 
     static const void *particles = malloc(SIZE); // TODO use #define
 
-    static std::stack<void *> free_addresses;
-
-    static bool initialized_particles = false;
-
-    static void init_particles(Particle &particles, size_t size, std::stack<void *> &free_addresses)
-    {
-        std::cout << "initialize...";
-        static const int amount_particles = floor(SIZE / sizeof(Particle));
-        Particle *currentAddress = &particles;
-        free_addresses = std::stack<void *>();
-        for (int i = 0; i < amount_particles; i++)
-        {
-            free_addresses.push(&currentAddress);
-            std::cout << free_addresses.top();
-
-            std::cout << &currentAddress << std::endl;
-            currentAddress = (Particle *) (&currentAddress + sizeof(Particle));
-            std::cout << &currentAddress << std::endl << std::endl;
-        }
-        std::cout << "created " << free_addresses.size() << " free addresses" << std::endl
-                  << "  from " << &particles << std::endl << "  to   " << &currentAddress << std::endl;
-        initialized_particles = true;
-    }
-
+    static std::stack<Particle *> free_addresses;
+    static bool initialized = false;
 }
 
 
 void *Particle::operator new(std::size_t size) noexcept
 {
 
-    if (!initialized_particles)
-        init_particles((Particle &) particles, SIZE, free_addresses);
+    if (!initialized)
+    {
+        initialized = true;
 
-    std::cout << "new...";
+        Particle *currentAddress = (Particle *) &particles;
+        free_addresses = std::stack<Particle *>();
+
+        static const int amount_particles = floor(SIZE / sizeof(Particle));
+        std::cout << "amount particles: " << amount_particles << std::endl;
+        for (int i = 0; i < amount_particles; i++)
+        {
+            free_addresses.push(currentAddress);
+            currentAddress = currentAddress + 1;
+        }
+    }
 
     if (free_addresses.size() == 0)
     {
-        std::cout << "full...";
+        //std::cout << "full...";
         return nullptr;
     }
 
-    Particle *particleLocation = reinterpret_cast<Particle *>(free_addresses.top());
-    std::cout << "create " << &particleLocation << std::endl;
-    Particle *particle = ::new(particleLocation) Particle();
-    std::cout << "create " << &particle << std::endl;
-
+    Particle *particle = reinterpret_cast<Particle *>(free_addresses.top());
+    particle = ::new Particle();
     free_addresses.pop(); // pop on success only
     return particle;
 }
 
 void Particle::operator delete(void *ptr)
 {
-    std::cout << "delete " << &ptr << std::endl;
+    Particle *p = (Particle *) ptr;
     ::operator delete(ptr);
-    free_addresses.push(&ptr);
-    ptr = nullptr;
-    return;
+    free_addresses.push(p);
 }
