@@ -26,11 +26,14 @@ using secs = std::chrono::duration<float, std::chrono::seconds::period>;
 
 struct Particle
 {
-    QVector2D  position;
-    QVector2D  velocity;
+    QVector2D position;
+    QVector2D velocity;
     time_point tod;     // time of death
-    float      energy;  // energy carrying
+    float energy;  // energy carrying
 
-    // ToDo: forward declare here
+    static void *operator new(std::size_t size) noexcept;
+
+    static void operator delete(void *ptr);
+
 };
 
