@@ -3,9 +3,9 @@ project (Task1.1)
 set (CMAKE_CXX_STANDARD 14)
 
 # compile & link
-#add_library (Lib Lib.cpp)
-add_executable (run greet_world.cpp)
-#target_link_libraries (run Lib)
+add_library (tree_streambuf tree_streambuf.cpp)
+add_executable (run tree_streambuf-test.cpp)
+target_link_libraries (run tree_streambuf)
 
 # test
 #include(CTest)
