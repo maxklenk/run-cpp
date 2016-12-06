@@ -3,6 +3,4 @@
 mkdir _build
 cd _build
 cmake ..
-cmake --build .
-
-Debug/greet_world.exe
+cmake --build . && Debug/run.exe
