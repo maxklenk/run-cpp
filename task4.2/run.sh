@@ -3,4 +3,4 @@
 mkdir _build
 cd _build
 cmake ..
-cmake --build . && ./run
+cmake --build . && ./runP

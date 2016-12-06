@@ -16,8 +16,5 @@ int main(int argc, char const * argv[])
             std::cout << std::setw(3) << item.first << ": "
                       << item.second << std::endl;
         }
-
-        // TODO(max): when to end loop?
-        break;
     }
 }
