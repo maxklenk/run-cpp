@@ -5,7 +5,7 @@
 #include <utility>
 
 constexpr auto pi = 3.1415926535897932384626433f;
-constexpr auto pi_2 = 2 * pi;
+constexpr auto double_pi = 2.0f * pi;
 
 
 constexpr float fastSinFill(const int i)
@@ -41,8 +41,8 @@ constexpr auto sinTable = Table<3150>{};
  */
 float fastSin(float x)
 {
-    while (x > pi) x = (x - pi_2);
-    while (x < -pi) x = (x + pi_2);
+    while (x > pi) x = x - double_pi;
+    while (x < -pi) x = x + double_pi;
     if (x > 0)
         return sinTable.values[(int) (x * 1000.f)];
     else
