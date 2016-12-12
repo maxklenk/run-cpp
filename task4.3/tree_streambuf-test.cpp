@@ -1,14 +1,28 @@
-
+#include <fstream>
 #include <iostream>
 #include <iomanip>
-#include <iterator>
 #include <random>
+#include <string>
 
 #include "tree_streambuf.h"
 
 
 int main(int argc, char const * argv[])
 {
+
+    auto tree_buf = tree_streambuf();
+    tree_buf.add_sink(std::cout.rdbuf());
+
+    std::cout.rdbuf(&tree_buf);
+
+    std::ifstream is;
+    std::filebuf * fb = is.rdbuf();
+
+    fb->open ("test.txt",std::ios::out|std::ios::app);
+
+    tree_buf.add_sink(is.rdbuf());
+
+
 	std::cout << "================================================" << std::endl;
 	std::cout << "command line: ";
 	for (int i = 0; i < argc; ++i)
@@ -50,4 +64,7 @@ Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lo
 	};
 	std::cout.write(s2.data(), s2.size());
 	std::cout.put('\n');
+
+
+    fb->close();
 }
