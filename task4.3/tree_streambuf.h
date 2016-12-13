@@ -11,7 +11,12 @@ class tree_streambuf : public std::streambuf
 
 private:
 
-    // TODO Ensure that no data can be read from the buffer (write-only).
+    // avoid reading from tree_buf
+    using std::streambuf::sgetc;
+    using std::streambuf::sgetn;
+    using std::streambuf::in_avail;
+    using std::streambuf::sbumpc;
+    using std::streambuf::snextc;
 
     std::vector<std::streambuf *> streams;
 

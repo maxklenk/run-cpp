@@ -27,7 +27,12 @@ int main(int argc, char const * argv[])
 
     // cout will print on console and file...
 
-	std::cout << "================================================" << std::endl;
+	std::cout << "================================================" << std::endl << 1;
+
+
+    // try to read from buffer fails
+    //std::clog << "tree_buf: " << tree_buf.sgetc();
+
 	std::cout << "command line: ";
 	for (int i = 0; i < argc; ++i)
 	{
