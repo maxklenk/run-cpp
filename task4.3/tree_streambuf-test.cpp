@@ -27,7 +27,7 @@ int main(int argc, char const * argv[])
 
     // cout will print on console and file...
 
-	std::cout << "================================================" << std::endl << 1;
+	std::cout << "================================================" << std::endl;
 
 
     // try to read from buffer fails

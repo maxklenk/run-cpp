@@ -17,6 +17,8 @@ private:
     using std::streambuf::in_avail;
     using std::streambuf::sbumpc;
     using std::streambuf::snextc;
+    using std::streambuf::sputbackc;
+    using std::streambuf::sungetc;
 
     std::vector<std::streambuf *> streams;
 
