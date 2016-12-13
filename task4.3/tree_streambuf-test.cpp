@@ -11,16 +11,18 @@ int main(int argc, char const * argv[])
 
     auto tree_buf = tree_streambuf();
 
-    // add cout to tree_buf sinks
-    tree_buf.add_sink(std::cout.rdbuf());
+	// set treebuf as rdbuf for cout
+	std::streambuf* defaultCout = std::cout.rdbuf();
+	std::cout.rdbuf(&tree_buf);
 
-    std::ofstream coutlogstream("cout.log");
+    // add cout to tree_buf sinks
+    tree_buf.add_sink(defaultCout);
+
+    std::ofstream logstream("cout.log");
 
     // add logfile cout.log to sinks
-    tree_buf.add_sink(coutlogstream.rdbuf());
+    tree_buf.add_sink(logstream.rdbuf());
 
-    // set treebuf as rdbuf for cout
-    std::cout.rdbuf(&tree_buf);
 
     // cout will print on console and file...
 
@@ -70,4 +72,9 @@ Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lo
 	};
 	std::cout.write(s2.data(), s2.size());
 	std::cout.put('\n');
+
+	// restore cout to default buffer
+	std::cout.rdbuf(defaultCout);
+
+	std::cout << "Default output on cout only...";
 }
