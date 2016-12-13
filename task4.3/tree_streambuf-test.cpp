@@ -11,17 +11,21 @@ int main(int argc, char const * argv[])
 {
 
     auto tree_buf = tree_streambuf();
-    tree_buf.add_sink(std::cout.rdbuf());
 
-    std::cout.rdbuf(&tree_buf);
+    // add cout to tree_buf sinks
+    tree_buf.add_sink(std::cout.rdbuf());
 
     std::ifstream is;
     std::filebuf * fb = is.rdbuf();
+    fb->open ("cout.log",std::ios::out|std::ios::app);
 
-    fb->open ("test.txt",std::ios::out|std::ios::app);
+    // add logfile cout.log to sinks
+    tree_buf.add_sink(fb);
 
-    tree_buf.add_sink(is.rdbuf());
+    // set treebuf as rdbuf for cout
+    std::cout.rdbuf(&tree_buf);
 
+    // cout will print on console and file...
 
 	std::cout << "================================================" << std::endl;
 	std::cout << "command line: ";
