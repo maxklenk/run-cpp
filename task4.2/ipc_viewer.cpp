@@ -1,31 +1,53 @@
-
-#include <iostream>
-
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <boost/interprocess/mapped_region.hpp>
 
 #include "ipc_viewer.h"
+#include "shared_highscore.cpp"
 
 using namespace boost::interprocess;
 
 std::map <std::uint32_t, std::uint32_t> readHighScore(bool block) {
-    std::cout << "read " << block << std::endl;
-
     auto myMap = std::map<std::uint32_t, std::uint32_t>();
 
-    shared_memory_object shm{open_or_create, "HighScore", read_write};
-    shm.truncate(1024);
+    // Run the remover once if you want to clean up the shared Memory
+//    struct shm_remove
+//    {
+//        shm_remove() { shared_memory_object::remove("MySharedMemory"); }
+//        ~shm_remove(){ shared_memory_object::remove("MySharedMemory"); }
+//    } remover;
+
+    // Access Shared Object
+    shared_memory_object shm(open_or_create, "MySharedMemory", read_write);
+
+    // Set size
+    shm.truncate(sizeof(shared_highscore));
 
     // Map the whole shared memory in this process
-    mapped_region region(shm, read_only);
+    mapped_region region(shm, read_write);
 
-    // Check that memory
-    int *i2 = static_cast<int *>(region.get_address());
-    std::uint32_t playerId = *i2;
-    i2++;
-    std::uint32_t score = *i2;
+    // Get the address of the mapped region
+    void *addr = region.get_address();
 
-    myMap.insert(std::make_pair(playerId, score));
+    // Obtain a pointer to the shared structure
+    shared_highscore *data = new(addr) shared_highscore;
+
+    // Lock Access
+    scoped_lock <interprocess_mutex> lock(data->mutex);
+
+    if (!data->has_update && block) {
+        data->cond_update.wait(lock);
+    }
+
+    for (auto score : data->highScore) {
+        if (score[0] != 0) {
+            myMap.insert(std::make_pair(score[0], score[1]));
+        } else {
+            break;
+        }
+    }
+
+    // Mark that we read everything
+    data->has_update = false;
 
     return myMap;
 }

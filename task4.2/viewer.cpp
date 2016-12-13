@@ -9,7 +9,7 @@ int main(int argc, char const * argv[])
 {
     while (true)
     {
-        const auto highScore = readHighScore();
+        const auto highScore = readHighScore(true);
         std::cout << "\n\n";
         for (const auto & item : highScore)
         {
