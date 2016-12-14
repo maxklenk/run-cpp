@@ -19,6 +19,10 @@ std::string parseValue(const Value value) {
 
 void writeText(const FileContent &content, const std::string &filename) {
     std::ofstream myfile(filename);
+    // myfile.exceptions...
+
+    // myfile << showpoint; // for integral floats show ".0" always
+    // myfile << boolalpha; // for bool values print as true/false instead of 0/1
 
     // each line contains the key-value pair
     auto header = content.header();
@@ -27,11 +31,12 @@ void writeText(const FileContent &content, const std::string &filename) {
     }
 
     // One empty line marks the beginning of the raw data section.
-    myfile << std::endl;
+    myfile << std::endl; // \n instead
 
     // body
     for (const auto &data: content.body()) {
-        myfile << data;
+        myfile << data; // binary data shorter than hex
+        // text file: 0-Byte, 26-Byte, ... will be handled as EOF which is wrong
     }
 
     myfile.close();
@@ -69,7 +74,7 @@ FileContent readText(const std::string &filename, bool skipHeader) {
                     default :
                         if (valueString.find(".") != std::string::npos) {
                             // contains dot
-                            float num = std::stod(valueString);
+                            float num = std::stod(valueString); // stdof instead
                             fileContent.addHeaderItem(key, Value(num));
                         } else {
                             // or int
@@ -80,7 +85,7 @@ FileContent readText(const std::string &filename, bool skipHeader) {
             }
         }
         char c;
-        while(myfile.get(c)){
+        while(myfile.get(c)){ // get data by checking size whithout while
             body.push_back(c);
         }
         fileContent.setBody(body);
