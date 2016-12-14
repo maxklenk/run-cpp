@@ -10,4 +10,9 @@ How many bits of mantissa in a floating-point number are necessary to encode the
  1100010001111111110100001101001100110010011101001101011111000110
 
 
+ correct solution:
+ 3,141592654 / 2 = 1,570796327 benötigt werden 9 log 2 bits =30 bits (für hier 9 stellen)
+ 66 bits für 20 Stellen (ohne Vorzeichen, Vorkomma, nur Mantisse)
+
+
 
