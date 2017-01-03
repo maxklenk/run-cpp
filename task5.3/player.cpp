@@ -11,7 +11,7 @@
 Player::Player(int id, int dices)
 {
     this->score = 0;
-    this->id = id;
+    this->player_num = id;
     for (int i = 0; i < dices; i++)
     {
         this->dices.push_back(Dice());
@@ -30,7 +30,7 @@ std::vector<int> Player::play()
     {
         results.push_back(this->dices[i].roll());
     }
-    std::cout << "  - player_" << this->id << ": ";
+    std::cout << "  - player_" << this->player_num << ": ";
     for (auto &result: results)
         std::cout << result << " ";
     std::cout << std::endl;
@@ -40,6 +40,6 @@ std::vector<int> Player::play()
 
 std::ostream &operator<<(std::ostream &os, const Player &player)
 {
-    os << "player_" << player.id << ": " << player.score << "\n";
+    os << "<" << player.player_num << ">: <" << player.score << ">\n";
     return os;
 }

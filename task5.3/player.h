@@ -14,7 +14,7 @@
 class Player
 {
 private:
-    int id;
+    int player_num;
     std::vector<Dice> dices;
     int score;
 
