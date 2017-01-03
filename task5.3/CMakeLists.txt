@@ -4,7 +4,8 @@ set (CMAKE_CXX_STANDARD 14)
 
 # compile & link
 #add_library (Lib Lib.cpp)
-#add_executable (run greet_world.cpp)
+set(SOURCE_FILES seven-main.cpp)
+add_executable(run ${SOURCE_FILES})
 #target_link_libraries (run Lib)
 
 # test
