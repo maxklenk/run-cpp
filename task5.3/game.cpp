@@ -5,7 +5,7 @@
 #include "player.h"
 #include "game.h"
 
-Game::Game(int players, int dices)
+DiceGame::DiceGame(int players, int dices)
 {
     std::cout << "create default game... " << players << " players, " << dices << " dices" << std::endl;
     this->players = std::vector<Player>();
@@ -17,18 +17,18 @@ Game::Game(int players, int dices)
     }
 }
 
-int Game::calculateScore(std::vector<int> rolls)
+int DiceGame::calculateScore(std::vector<int> rolls)
 {
     std::cout << "calculate default score..." << std::endl;
     return 0;
 };
 
-Game::~Game()
+DiceGame::~DiceGame()
 {
     std::cout << "default game destructed..." << std::endl;
 }
 
-std::ostream &operator<<(std::ostream &os, const Game &game)
+std::ostream &operator<<(std::ostream &os, const DiceGame &game)
 {
     for (auto &player : game.players)
     {
@@ -49,7 +49,7 @@ int SevenCountsGame::calculateScore(std::vector<int> rolls)
     return result;
 }
 
-void Game::playRounds(int rounds)
+void DiceGame::playRounds(int rounds)
 {
     std::cout << " - play rounds: " << rounds << std::endl;
     for (int i = 0; i < rounds; )

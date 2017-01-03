@@ -11,12 +11,6 @@
 
 #include "dice.h"
 
-/* This is called a "forward declaration".  We use it to tell the compiler that the
-   identifier "Game" will from now on stand for a class, and this class will be defined
-   later.  We will not be able to make any use of "Game" before it has been defined, but
-   we will at least be able to declare pointers to it. */
-//class Game;
-
 class Player
 {
 private:

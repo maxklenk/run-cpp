@@ -7,21 +7,21 @@
 
 #include "player.h"
 
-class Game
+class DiceGame
 {
 
 private:
     std::vector<Player> players;
-    friend std::ostream &operator<<(std::ostream &os, const Game &game);
+    friend std::ostream &operator<<(std::ostream &os, const DiceGame &game);
 
 public:
-    Game(int players, int dices);
+    DiceGame(int players, int dices);
 
     void playRounds(int i);
 
     virtual int calculateScore(std::vector<int> rolls);
 
-    ~Game();
+    ~DiceGame();
 
 };
 
@@ -29,10 +29,10 @@ public:
 /**
  * game for multiple players, each with 2 dices
  */
-class SevenCountsGame : public Game
+class SevenCountsGame : public DiceGame
 {
 public:
-    SevenCountsGame(int players) : Game(players, 2) {
+    SevenCountsGame(int players) : DiceGame(players, 2) {
         std::cout << " - mode: seven counts game..." << std::endl;};
 
     int calculateScore(std::vector<int> rolls);
@@ -41,10 +41,10 @@ public:
 /**
  * game for multiple players, each with 2 dices
  */
-class StuckInTheMudGame : public Game
+class StuckInTheMudGame : public DiceGame
 {
 public:
-    StuckInTheMudGame(int players) : Game(players, 2) {
+    StuckInTheMudGame(int players) : DiceGame(players, 2) {
         std::cout << " - mode: stuck in the mud game..." << std::endl;
     };
 
