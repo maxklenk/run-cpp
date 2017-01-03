@@ -17,7 +17,7 @@ private:
 public:
     Game(int players, int dices);
 
-    void playRounds(unsigned int i);
+    void playRounds(int i);
 
     virtual int calculateScore(std::vector<int> rolls);
 
@@ -26,26 +26,29 @@ public:
 };
 
 
-///**
-// * game for multiple players, each with 2 dices
-// */
-//class SevenCountsGame : Game
-//{
-//public:
-//    SevenCountsGame(int players) : Game(players, 2) {};
-//
-//    int calculateScore(std::vector<int> rolls);
-//};
-//
-///**
-// * game for multiple players, each with 2 dices
-// */
-//class StuckInTheMudGame : Game
-//{
-//public:
-//    StuckInTheMudGame(int players) : Game(players, 2) {};
-//
-//    int calculateScore(std::vector<int> rolls);
-//};
+/**
+ * game for multiple players, each with 2 dices
+ */
+class SevenCountsGame : public Game
+{
+public:
+    SevenCountsGame(int players) : Game(players, 2) {
+        std::cout << " - mode: seven counts game..." << std::endl;};
+
+    int calculateScore(std::vector<int> rolls);
+};
+
+/**
+ * game for multiple players, each with 2 dices
+ */
+class StuckInTheMudGame : public Game
+{
+public:
+    StuckInTheMudGame(int players) : Game(players, 2) {
+        std::cout << " - mode: stuck in the mud game..." << std::endl;
+    };
+
+    int calculateScore(std::vector<int> rolls);
+};
 
 #endif

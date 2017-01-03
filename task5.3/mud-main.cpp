@@ -6,10 +6,11 @@
 #include "game.h"
 
 
-int main(int argc, char const * argv[])
+int main(int argc, char const *argv[])
 {
-    if(argc < 3){
-        std::cout<< "set arguments: (1) the number of players and (2) the number of simulation rounds";
+    if (argc < 3)
+    {
+        std::cout << "set arguments: (1) the number of players and (2) the number of simulation rounds";
         return -1;
     }
 
@@ -31,7 +32,7 @@ int main(int argc, char const * argv[])
     }
 
 
-    SevenCountsGame game(num_players);
+    StuckInTheMudGame game(num_players);
 
     game.playRounds(num_sim_rounds);
 

@@ -7,24 +7,25 @@
 
 Game::Game(int players, int dices)
 {
-    std::cout << "create game..." << std::endl;
+    std::cout << "create default game... " << players << " players, " << dices << " dices" << std::endl;
     this->players = std::vector<Player>();
-    for (int i = 0; i < players; i++)
+
+    for (int i = 0; i < players; )
     {
-        auto player = Player(i, dices);
+        auto player = Player(++i, dices);
         this->players.push_back(player);
     }
 }
 
 int Game::calculateScore(std::vector<int> rolls)
 {
-    std::cout << "return default result..." << std::endl;
+    std::cout << "calculate default score..." << std::endl;
     return 0;
 };
 
 Game::~Game()
 {
-    std::cout << "game destructed..." << std::endl;
+    std::cout << "default game destructed..." << std::endl;
 }
 
 std::ostream &operator<<(std::ostream &os, const Game &game)
@@ -36,20 +37,24 @@ std::ostream &operator<<(std::ostream &os, const Game &game)
     return os;
 }
 
-//int SevenCountsGame::calculateScore(std::vector<int> rolls)
-//{
-//    int sum = 0;
-//    for (const auto &n : rolls)
-//        sum += n;
-//    if (sum == 7)
-//        return 1;
-//    return 0;
-//}
-
-void Game::playRounds(unsigned int rounds)
+int SevenCountsGame::calculateScore(std::vector<int> rolls)
 {
+    int sum = 0, result = 0;
+    for (const auto &n : rolls)
+        sum += n;
+    if (sum == 7)
+        result = 1;
+
+    std::cout << "    seven counts score (sum is " << sum << "): " << result << std::endl;
+    return result;
+}
+
+void Game::playRounds(int rounds)
+{
+    std::cout << " - play rounds: " << rounds << std::endl;
     for (int i = 0; i < rounds; ++i)
     {
+        std::cout << "- round: " << i << std::endl;
         for (auto &player : this->players)
         {
             auto results = player.play();
@@ -59,16 +64,18 @@ void Game::playRounds(unsigned int rounds)
     }
 }
 
-//int StuckInTheMudGame::calculateScore(std::vector<int> rolls)
-//{
-//    int sum = 0;
-//    for (const auto &n :rolls)
-//    {
-//        if (n == 2 || n == 5)
-//        {
-//            return 0;
-//        }
-//        sum += n;
-//    }
-//    return sum;
-//}
+int StuckInTheMudGame::calculateScore(std::vector<int> rolls)
+{
+    int sum = 0;
+    for (const auto &n :rolls)
+    {
+        if (n == 2 || n == 5)
+        {
+            sum = 0;
+            break;
+        }
+        sum += n;
+    }
+    std::cout << "    stuck in the mud score: " << sum << std::endl;
+    return sum;
+}

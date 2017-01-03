@@ -30,9 +30,10 @@ std::vector<int> Player::play()
     {
         results.push_back(this->dices[i].roll());
     }
-//    auto currentScore = this->game->calculateScore(results);
-//
-//    this->score += currentScore;
+    std::cout << "  - player_" << this->id << ": ";
+    for (auto &result: results)
+        std::cout << result << " ";
+    std::cout << std::endl;
     return results;
 }
 
