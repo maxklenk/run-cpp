@@ -2,13 +2,13 @@
 // Created by Tobias Wollowski on 02.01.17.
 //
 
-#include <stdlib.h>     /* rand */
 #include "dice.h"
 
-/**
- * simple random between 1 and 6
- * @return
- */
-uint16_t Dice::roll() {
-    return (uint16_t) rand() % 6 + 1;
+Dice::Dice(){
+    std::random_device rd;
+    this->seed = std::mt19937(rd());
+}
+
+int Dice::roll() {
+    return distribution(this->seed);
 }

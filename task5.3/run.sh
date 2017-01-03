@@ -3,4 +3,6 @@
 mkdir _build
 cd _build
 cmake ..
-cmake --build . && ./seven 4 1000 && ./mud 4 1000
+cmake --build .
+./seven 4 10
+./mud 4 10

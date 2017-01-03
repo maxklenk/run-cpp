@@ -5,10 +5,16 @@
 #ifndef DICE_H
 #define DICE_H
 
+#include <random>
+
 class Dice
 {
+private:
+    std::mt19937 seed;
+    std::uniform_int_distribution<int> distribution {1,6};
 public:
-    uint16_t roll();
+    Dice();
+    int roll();
 };
 
 #endif

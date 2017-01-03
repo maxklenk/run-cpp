@@ -52,9 +52,9 @@ int SevenCountsGame::calculateScore(std::vector<int> rolls)
 void Game::playRounds(int rounds)
 {
     std::cout << " - play rounds: " << rounds << std::endl;
-    for (int i = 0; i < rounds; ++i)
+    for (int i = 0; i < rounds; )
     {
-        std::cout << "- round: " << i << std::endl;
+        std::cout << "- round: " << ++i << std::endl;
         for (auto &player : this->players)
         {
             auto results = player.play();

@@ -23,11 +23,11 @@ int main(int argc, char const *argv[])
     }
 
 
-    std::istringstream ssr(argv[1]);
+    std::istringstream ssr(argv[2]);
     int num_sim_rounds = 0;
     if (!(ssr >> num_sim_rounds) || num_sim_rounds < 1)
     {
-        std::cerr << "Invalid simulation rounds number " << argv[1] << '\n';
+        std::cerr << "Invalid simulation rounds number " << argv[2] << '\n';
         return -3;
     }
 
