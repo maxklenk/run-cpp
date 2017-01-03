@@ -4,29 +4,41 @@
 
 #include <string>
 #include <iostream>
-//#include "dice.h"
-//#include "player.h"
-//#include "game.h"
 
-Player::Player(std::string name, int dices, Game *game)
+#include "dice.h"
+#include "player.h"
+
+Player::Player(int id, int dices)
 {
     this->score = 0;
-    this->name = name;
+    this->id = id;
     for (int i = 0; i < dices; i++)
     {
         this->dices.push_back(Dice());
     }
-    this->game = game;
 }
 
-void Player::play()
+void Player::updateScore(int points)
+{
+    this->score += points;
+}
+
+std::vector<int> Player::play()
 {
     std::vector<int> results;
     for (int i = 0; i < this->dices.size(); i++)
     {
         results.push_back(this->dices[i].roll());
     }
-    auto currentScore = this->game->calculateScore(results);
+//    auto currentScore = this->game->calculateScore(results);
+//
+//    this->score += currentScore;
+    return results;
+}
 
-    this->score += currentScore;
+
+std::ostream &operator<<(std::ostream &os, const Player &player)
+{
+    os << "player_" << player.id << ": " << player.score << "\n";
+    return os;
 }

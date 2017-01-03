@@ -2,14 +2,16 @@
 // Created by Tobias Wollowski on 02.01.17.
 //
 
+#include "player.h"
 #include "game.h"
 
 Game::Game(int players, int dices)
 {
+    std::cout << "create game..." << std::endl;
     this->players = std::vector<Player>();
     for (int i = 0; i < players; i++)
     {
-        auto player = Player("player_" + i, dices, this);
+        auto player = Player(i, dices);
         this->players.push_back(player);
     }
 }
@@ -23,6 +25,15 @@ int Game::calculateScore(std::vector<int> rolls)
 Game::~Game()
 {
     std::cout << "game destructed..." << std::endl;
+}
+
+std::ostream &operator<<(std::ostream &os, const Game &game)
+{
+    for (auto &player : game.players)
+    {
+        os << player;
+    }
+    return os;
 }
 
 //int SevenCountsGame::calculateScore(std::vector<int> rolls)
@@ -41,7 +52,9 @@ void Game::playRounds(unsigned int rounds)
     {
         for (auto &player : this->players)
         {
-            player.play();
+            auto results = player.play();
+            auto points = calculateScore(results);
+            player.updateScore(points);
         }
     }
 }

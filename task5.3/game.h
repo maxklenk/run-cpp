@@ -2,14 +2,17 @@
 // Created by Tobias Wollowski on 02.01.17.
 //
 
+#ifndef GAME_H
+#define GAME_H
+
 #include "player.h"
 
 class Game
 {
-    friend std::ostream &operator<<(std::ostream &os, const Game &game);
 
 private:
     std::vector<Player> players;
+    friend std::ostream &operator<<(std::ostream &os, const Game &game);
 
 public:
     Game(int players, int dices);
@@ -18,17 +21,10 @@ public:
 
     virtual int calculateScore(std::vector<int> rolls);
 
-    virtual ~Game();
+    ~Game();
+
 };
 
-std::ostream &operator<<(std::ostream &os, const Game &game)
-{
-    for (auto &player : game.players)
-    {
-        os << player;
-    }
-    return os;
-}
 
 ///**
 // * game for multiple players, each with 2 dices
@@ -51,3 +47,5 @@ std::ostream &operator<<(std::ostream &os, const Game &game)
 //
 //    int calculateScore(std::vector<int> rolls);
 //};
+
+#endif

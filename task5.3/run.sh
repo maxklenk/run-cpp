@@ -3,4 +3,4 @@
 mkdir _build
 cd _build
 cmake ..
-cmake --build . && ./run 1 1
+cmake --build . && ./run 3 10

@@ -1,7 +1,9 @@
 #include <iostream>
-
-#include "game.h"
 #include <sstream>
+
+#include "dice.h"
+#include "player.h"
+#include "game.h"
 
 
 int main(int argc, char const * argv[])
@@ -25,9 +27,11 @@ int main(int argc, char const * argv[])
 
     Game game(num_players,2);
 
-//    game.playRounds(num_sim_rounds);
+    std::cout << game;
 
-//    std::cout << game;
+    game.playRounds(num_sim_rounds);
+
+    std::cout << game;
 
     return 0;
 }
