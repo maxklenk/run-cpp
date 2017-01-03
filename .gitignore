@@ -36,4 +36,5 @@ _build
 
 # Mac
 .DS_Store
-**cmake-build-debug
+**/cmake-build-debug
+**/CMakeFiles
