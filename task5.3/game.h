@@ -6,39 +6,48 @@
 
 class Game
 {
-protected:
+    friend std::ostream &operator<<(std::ostream &os, const Game &game);
+
+private:
     std::vector<Player> players;
 
+public:
     Game(int players, int dices);
 
-public:
-    virtual int calculateScore(std::vector<int> rolls) { return 0; };
+    void playRounds(unsigned int i);
 
-    std::ostream &operator<<(std::ostream &os);
+    virtual int calculateScore(std::vector<int> rolls);
 
-    std::vector<Player> getPlayers() { return players; };
-
-    virtual void playRounds(unsigned int i);
+    virtual ~Game();
 };
 
-/**
- * game for multiple players, each with 2 dices
- */
-class SevenCountsGame : Game
+std::ostream &operator<<(std::ostream &os, const Game &game)
 {
-public:
-    SevenCountsGame(int players) : Game(players, 2) {};
+    for (auto &player : game.players)
+    {
+        os << player;
+    }
+    return os;
+}
 
-    int calculateScore(std::vector<int> rolls);
-};
-
-/**
- * game for multiple players, each with 2 dices
- */
-class StuckInTheMudGame : Game
-{
-public:
-    StuckInTheMudGame(int players) : Game(players, 2) {};
-
-    int calculateScore(std::vector<int> rolls);
-};
+///**
+// * game for multiple players, each with 2 dices
+// */
+//class SevenCountsGame : Game
+//{
+//public:
+//    SevenCountsGame(int players) : Game(players, 2) {};
+//
+//    int calculateScore(std::vector<int> rolls);
+//};
+//
+///**
+// * game for multiple players, each with 2 dices
+// */
+//class StuckInTheMudGame : Game
+//{
+//public:
+//    StuckInTheMudGame(int players) : Game(players, 2) {};
+//
+//    int calculateScore(std::vector<int> rolls);
+//};

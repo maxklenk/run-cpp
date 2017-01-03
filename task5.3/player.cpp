@@ -10,6 +10,7 @@
 
 Player::Player(std::string name, int dices, Game *game)
 {
+    this->score = 0;
     this->name = name;
     for (int i = 0; i < dices; i++)
     {
@@ -27,11 +28,5 @@ void Player::play()
     }
     auto currentScore = this->game->calculateScore(results);
 
-    this->score+=currentScore;
-}
-
-std::ostream &Player::operator<<(std::ostream &os)
-{
-    os << name << ": " << score << "\n";
-    return os;
+    this->score += currentScore;
 }

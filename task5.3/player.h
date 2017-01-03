@@ -15,15 +15,22 @@ class Game;
 
 class Player
 {
+    friend std::ostream &operator<<(std::ostream &os, const Player &player);
+
 private:
     std::string name;
     std::vector<Dice> dices;
-    int score = 0;
-    Game* game;
+    int score;
+    Game *game;
 public:
-    Player(std::string name, int dices, Game* game);
+    Player(std::string name, int dices, Game *game);
 
     void play();
 
-    std::ostream& operator<< (std::ostream& os);
 };
+
+std::ostream &operator<<(std::ostream &os, const Player &player)
+{
+    os << player.name << ": " << player.score << "\n";
+    return os;
+}

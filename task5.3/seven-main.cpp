@@ -23,7 +23,7 @@ int main(int argc, char const * argv[])
         std::cerr << "Invalid simulation rounds number " << argv[1] << '\n';
 
 
-    auto game = SevenCountsGame(num_players);
+    Game game(num_players,2);
 
 //    game.playRounds(num_sim_rounds);
 
