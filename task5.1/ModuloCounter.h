@@ -7,7 +7,11 @@ class ModuloCounter {
 public:
     explicit ModuloCounter(int newMin, int newMax, int newValue = 0) : min{newMin}, max{newMax} {
         this->setValue(newValue);
-    };
+    }
+
+    ModuloCounter(const ModuloCounter &other) : min{other.min}, max{other.max} {
+        this->setValue(other.value);
+    }
 
     void increment(int i = 1);
 
@@ -17,15 +21,13 @@ public:
 
     void setValue(int i);
 
-    const int getMin();
+    void setValue(ModuloCounter m);
 
-    void setMin(int i);
+    const int getMin();
 
     const int getMax();
 
-    void setMax(int i);
-
-    void setValue(ModuloCounter m);
+    const ModuloCounter operator*(ModuloCounter &other);
 
     friend std::ostream &operator<<(std::ostream &os, const ModuloCounter &game);
 

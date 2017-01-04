@@ -16,14 +16,14 @@ int main(int argc, char *argv[]) {
 
     // increment m1 and create ModuloCounter m2 with the new value
     m1.increment();
-    ModuloCounter m2{0, 10, m1.getValue()};
+    ModuloCounter m2 { m1 };
     // print m1
     std::cout << m1;
     // print m2
     std::cout << m2;
 
     // decrement m2 and create ModuloCounter m3 with the old value
-    ModuloCounter m3{0, 10, m2.getValue()};
+    ModuloCounter m3 { m2 };
     m2.decrement();
     // print m2
     std::cout << m2;
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     std::cout << m4;
 
     // create ModuloCounter m5 with the result of multiplying m4 and m3
-    ModuloCounter m5{-7, 18, m4.getValue() * m3.getValue()};
+    ModuloCounter m5 = m4 * m3;
     // print m5
     std::cout << m5;
 

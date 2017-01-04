@@ -32,16 +32,14 @@ const int ModuloCounter::getMin() {
     return this->min;
 }
 
-void ModuloCounter::setMin(int i) {
-    this->min = i;
-}
-
 const int ModuloCounter::getMax() {
     return this->max;
 }
 
-void ModuloCounter::setMax(int i) {
-    this->max = i;
+const ModuloCounter ModuloCounter::operator*(ModuloCounter &other) {
+    // TODO Copy / Move constructors?
+    ModuloCounter m{this->min, this->max, this->getValue() * other.getValue()};
+    return m;
 }
 
 std::ostream &operator<<(std::ostream &os, const ModuloCounter &counter) {
