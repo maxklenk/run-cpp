@@ -1,9 +1,4 @@
-//
-// Created by Tobias Wollowski on 02.01.17.
-//
-
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 
 #include "player.h"
 
@@ -50,5 +45,3 @@ public:
 
     int calculateScore(std::vector<int> rolls);
 };
-
-#endif

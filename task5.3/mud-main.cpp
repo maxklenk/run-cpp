@@ -5,7 +5,6 @@
 #include "player.h"
 #include "game.h"
 
-
 int main(int argc, char const *argv[])
 {
     if (argc < 3)

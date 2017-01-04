@@ -1,9 +1,4 @@
-//
-// Created by Tobias Wollowski on 02.01.17.
-//
-
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #include <string>
 #include <iostream>
@@ -28,5 +23,3 @@ public:
     std::vector<int> play();
 
 };
-
-#endif
