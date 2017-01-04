@@ -2,18 +2,6 @@
 
 #import "ModuloCounter.h"
 
-void ModuloCounter::increment(int i) {
-    this->setValue(this->value + i);
-}
-
-void ModuloCounter::decrement(int i) {
-    this->setValue(this->value - i);
-}
-
-const int ModuloCounter::getValue() {
-    return this->value;
-}
-
 void ModuloCounter::setValue(int i) {
     while (i >= this->max) {
         i = i - (this->max - this->min);
@@ -25,21 +13,94 @@ void ModuloCounter::setValue(int i) {
 }
 
 void ModuloCounter::setValue(ModuloCounter m) {
-    this->setValue(m.getValue());
+    this->setValue(m.value);
 }
 
-const int ModuloCounter::getMin() {
-    return this->min;
+ModuloCounter ModuloCounter::operator++() {
+    this->setValue(this->value + 1);
+    return *this;
 }
 
-const int ModuloCounter::getMax() {
-    return this->max;
+ModuloCounter ModuloCounter::operator++(int) {
+    ModuloCounter tmp(*this);
+    operator++();
+    return tmp;
 }
 
-const ModuloCounter ModuloCounter::operator*(ModuloCounter &other) {
-    // TODO Copy / Move constructors?
-    ModuloCounter m{this->min, this->max, this->getValue() * other.getValue()};
-    return m;
+ModuloCounter ModuloCounter::operator+=(int i) {
+    this->setValue(this->value + i);
+    return *this;
+}
+
+ModuloCounter operator+(ModuloCounter lhs, const int &rhs) {
+    lhs += rhs;
+    return lhs;
+}
+
+ModuloCounter ModuloCounter::operator--() {
+    this->setValue(this->value - 1);
+    return *this;
+}
+
+ModuloCounter ModuloCounter::operator--(int) {
+    ModuloCounter tmp(*this);
+    operator--();
+    return tmp;
+}
+
+ModuloCounter ModuloCounter::operator-=(int i) {
+    this->setValue(this->value - i);
+    return *this;
+}
+
+ModuloCounter operator-(ModuloCounter lhs, const int &rhs) {
+    lhs -= rhs;
+    return lhs;
+}
+
+ModuloCounter ModuloCounter::operator=(int i) {
+    this->setValue(i);
+    return *this;
+}
+
+ModuloCounter ModuloCounter::operator+=(const ModuloCounter &rhs) {
+    this->setValue(this->value + rhs.value);
+    return *this;
+}
+
+ModuloCounter operator+(ModuloCounter lhs, const ModuloCounter &rhs) {
+    lhs += rhs;
+    return lhs;
+}
+
+ModuloCounter ModuloCounter::operator-=(const ModuloCounter &rhs) {
+    this->setValue(this->value - rhs.value);
+    return *this;
+}
+
+ModuloCounter operator-(ModuloCounter lhs, const ModuloCounter &rhs) {
+    lhs -= rhs;
+    return lhs;
+}
+
+ModuloCounter ModuloCounter::operator*=(const ModuloCounter &rhs) {
+    this->setValue(this->value * rhs.value);
+    return *this;
+}
+
+ModuloCounter operator*(ModuloCounter lhs, const ModuloCounter &rhs) {
+    lhs *= rhs;
+    return lhs;
+}
+
+ModuloCounter ModuloCounter::operator/=(const ModuloCounter &rhs) {
+    this->setValue(this->value / rhs.value);
+    return *this;
+}
+
+ModuloCounter operator/(ModuloCounter lhs, const ModuloCounter &rhs) {
+    lhs /= rhs;
+    return lhs;
 }
 
 std::ostream &operator<<(std::ostream &os, const ModuloCounter &counter) {

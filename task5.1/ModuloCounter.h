@@ -9,25 +9,55 @@ public:
         this->setValue(newValue);
     }
 
+    explicit ModuloCounter(int newMin, int newMax, const ModuloCounter &other) : min{newMin}, max{newMax} {
+        this->setValue(other.value);
+    }
+
     ModuloCounter(const ModuloCounter &other) : min{other.min}, max{other.max} {
         this->setValue(other.value);
     }
 
-    void increment(int i = 1);
-
-    void decrement(int i = 1);
-
-    const int getValue();
+    const operator int() {
+        return value;
+    }
 
     void setValue(int i);
 
     void setValue(ModuloCounter m);
 
-    const int getMin();
+    ModuloCounter operator++();
 
-    const int getMax();
+    ModuloCounter operator++(int);
 
-    const ModuloCounter operator*(ModuloCounter &other);
+    ModuloCounter operator+=(int i);
+
+    friend ModuloCounter operator+(ModuloCounter lhs, const int &rhs);
+
+    ModuloCounter operator--();
+
+    ModuloCounter operator--(int);
+
+    ModuloCounter operator-=(int i);
+
+    friend ModuloCounter operator-(ModuloCounter lhs, const int &rhs);
+
+    ModuloCounter operator=(int i);
+
+    ModuloCounter operator+=(const ModuloCounter &rhs);
+
+    friend ModuloCounter operator+(ModuloCounter lhs, const ModuloCounter &rhs);
+
+    ModuloCounter operator-=(const ModuloCounter &rhs);
+
+    friend ModuloCounter operator-(ModuloCounter lhs, const ModuloCounter &rhs);
+
+    ModuloCounter operator*=(const ModuloCounter &rhs);
+
+    friend ModuloCounter operator*(ModuloCounter lhs, const ModuloCounter &rhs);
+
+    ModuloCounter operator/=(const ModuloCounter &rhs);
+
+    friend ModuloCounter operator/(ModuloCounter lhs, const ModuloCounter &rhs);
 
     friend std::ostream &operator<<(std::ostream &os, const ModuloCounter &game);
 
