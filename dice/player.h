@@ -18,7 +18,7 @@ private:
     friend std::ostream &operator<<(std::ostream &os, const Player &player);
 
 public:
-    Player(int player_num, int dices);
+    Player(int player_num);
 
     void updateScore(int points);
 

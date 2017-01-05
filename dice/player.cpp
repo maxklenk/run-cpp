@@ -4,7 +4,7 @@
 #include "dice.h"
 #include "player.h"
 
-Player::Player(int player_num, int dices)
+Player::Player(int player_num)
 {
     this->score = 0;
     this->player_num = player_num;

@@ -8,7 +8,7 @@ DiceGame::DiceGame(int players, int dices)
 
     for (int i = 0; i < players;)
     {
-        auto player = Player(++i, dices);
+        auto player = Player(++i);
         this->players.push_back(player);
     }
 
