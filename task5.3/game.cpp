@@ -6,14 +6,12 @@ DiceGame::DiceGame(int players, int dices)
 {
     std::cout << "create default game... " << players << " players, " << dices << " dices" << std::endl;
 
-    this->players = std::vector<Player>();
     for (int i = 0; i < players;)
     {
         auto player = Player(++i, dices);
         this->players.push_back(player);
     }
 
-    this->dices = std::vector<Dice>();
     for (int i = 0; i < dices; i++)
     {
         this->dices.push_back(Dice());
