@@ -2,6 +2,10 @@
 
 #include <random>
 
+/**
+ * Generates (pseudo-) random numbers in range 1...6.
+ * The generated numbers are (pseudo-) independent for each Dice instance.
+ */
 class Dice
 {
 private:

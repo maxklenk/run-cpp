@@ -4,14 +4,10 @@
 #include "dice.h"
 #include "player.h"
 
-Player::Player(int id, int dices)
+Player::Player(int player_num, int dices)
 {
     this->score = 0;
-    this->player_num = id;
-    for (int i = 0; i < dices; i++)
-    {
-        this->dices.push_back(Dice());
-    }
+    this->player_num = player_num;
 }
 
 void Player::updateScore(int points)
@@ -19,21 +15,16 @@ void Player::updateScore(int points)
     this->score += points;
 }
 
-std::vector<int> Player::play()
-{
-    std::vector<int> results;
-    for (int i = 0; i < this->dices.size(); i++)
-    {
-        results.push_back(this->dices[i].roll());
-    }
-    std::cout << "  - player_" << this->player_num << ": ";
-    for (auto &result: results)
-        std::cout << result << " ";
-    std::cout << std::endl;
-    return results;
+int Player::getNum(){
+    return this->player_num;
 }
 
-
+/**
+ * scores printed to the console in the form “<player_num>: <score>\n”.
+ * @param os
+ * @param player
+ * @return
+ */
 std::ostream &operator<<(std::ostream &os, const Player &player)
 {
     os << "<" << player.player_num << ">: <" << player.score << ">\n";

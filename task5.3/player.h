@@ -6,20 +6,21 @@
 
 #include "dice.h"
 
+/**
+ * Player is identified by player_num and contains the current score which can be updated and fetched.
+ */
 class Player
 {
 private:
     int player_num;
-    std::vector<Dice> dices;
     int score;
 
     friend std::ostream &operator<<(std::ostream &os, const Player &player);
 
 public:
-    Player(int id, int dices);
+    Player(int player_num, int dices);
 
     void updateScore(int points);
 
-    std::vector<int> play();
-
+    int getNum();
 };
