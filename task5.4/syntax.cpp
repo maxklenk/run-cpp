@@ -91,16 +91,28 @@ struct Account
     }
 };
 
-struct Object
+struct BaseObject
+{
+public:
+    BaseObject() {}
+    BaseObject(float value, bool count) : m_value(value) {}
+    ~BaseObject() {}
+
+    operator float() const {
+        return m_value;
+    }
+
+    float m_value;
+};
+
+struct Object : BaseObject
 {
 public:
     Object(float value, bool count);
     ~Object();
-    
-    operator float() const {
-        return m_value;
-    }
-    
+
+    Object(BaseObject b) : Object(b.m_value, true) {}
+
     float m_value;
 };
 
@@ -116,9 +128,9 @@ struct Generator
 {
     static size_t objectInstanceCount;
 
-    Object operator()()
+    BaseObject operator()()
     {
-        return Object(rand(), true);
+        return BaseObject(rand(), false);
     }
 };
 
@@ -356,9 +368,7 @@ void generator()
         }
     }
 
-    // TODO
-//    std::cout << objects.size() << " " << Generator::objectInstanceCount << std::endl;
-//    assert(objects.size() == Generator::objectInstanceCount);
+    assert(objects.size() == Generator::objectInstanceCount);
 }
 
 void accounting()
