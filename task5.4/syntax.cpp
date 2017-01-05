@@ -122,21 +122,156 @@ struct Generator
     }
 };
 
+struct Coordinate
+{
+    int y;
+    int x;
+
+    Coordinate(int y, int x) {
+        this->y = y;
+        this->x = x;
+    }
+};
+
+struct Coordinates
+{
+    std::vector<Coordinate> items;
+
+    Coordinates() {}
+
+    Coordinates(Coordinate coord) {
+        this->items.emplace_back(coord);
+    }
+
+    void emplace_back(Coordinate coord) {
+        this->items.emplace_back(coord);
+    }
+};
+
+struct Columns
+{
+    int elements;
+    int size;
+
+    Columns(int size, int elements) {
+        this->size = size;
+        this->elements = elements;
+    }
+};
+
+struct Rows
+{
+    int elements;
+    int size;
+
+    Rows(int size, int elements) {
+        this->size = size;
+        this->elements = elements;
+    }
+
+    friend Coordinates operator==(const Rows r, const Columns c) {
+        Coordinates result;
+        for (int i = 0; i < r.size && i < r.elements && i < c.size && i < c.elements; ++i) {
+            Coordinate newCoord { i, i };
+            result.emplace_back(newCoord);
+        }
+
+        return result;
+    }
+
+    friend Coordinates operator==(const Rows r, const int row) {
+        Coordinates result;
+        if (row <= r.size) {
+            for (int i = 0; i < r.elements; ++i) {
+                Coordinate newCoord { row, i };
+                result.emplace_back(newCoord);
+            }
+        }
+
+        return result;
+    }
+
+    friend Coordinates operator>(const Rows r, const Columns c) {
+        Coordinates result;
+        for (int i = 0; i < r.size && i < c.elements; ++i) {
+            for (int j = 0; j < r.elements && j < c.size; ++j) {
+                if (i > j) {
+                    Coordinate newCoord{i, j};
+                    result.emplace_back(newCoord);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    friend Coordinates operator<(const Rows r, const Columns c) {
+        Coordinates result;
+        for (int i = 0; i < r.size && i < c.elements; ++i) {
+            for (int j = 0; j < r.elements && j < c.size; ++j) {
+                if (i < j) {
+                    Coordinate newCoord{i, j};
+                    result.emplace_back(newCoord);
+                }
+            }
+        }
+
+        return result;
+    }
+};
+
+
+
+
+struct Column {
+    int i;
+    Column(int i) {
+        this->i = i;
+    }
+};
+
+
+struct Row {
+    int i;
+    Row(const int i) {
+        this->i = i;
+    }
+
+    friend Coordinates operator,(const Row r, const Column c) {
+        Coordinate coord{ r.i, c.i};
+        return { coord };
+    };
+
+    friend Coordinates operator,(const Column c, const Row r) {
+        Coordinate coord{ r.i, c.i};
+        return { coord };
+    };
+};
+
+Row operator "" _y(unsigned long long int i) {
+    return Row { (int) i };
+}
+Column operator "" _x(unsigned long long int i) {
+    return Column { (int) i };
+}
+
 
 struct Matrix
 {
-    Matrix()
-    {
+    Columns x;
+    Rows y;
 
-        for (size_t i = 0; i < sizeof(m_f) / sizeof(m_f[0]); ++i)
+    Matrix() : x{4,4}, y{4,4}
+    {
+        for (size_t i = 0; i < size;)
         {
-            m_f[i++] = 0.0f;
+            m_f[i++] = 0;
         }
     }
     
-    Matrix(std::initializer_list<float> initializer)
+    Matrix(std::initializer_list<float> initializer): x{4,4}, y{4,4}
     {
-        assert(initializer.size() == sizeof(m_f) / sizeof(m_f[0]));
+        assert(initializer.size() == size);
         
         size_t i = 0;
         for (auto value : initializer)
@@ -145,27 +280,51 @@ struct Matrix
         }
     }
 
-    float& operator[](int i) {
-        return this->m_f[i];
+    Matrix operator[](Coordinates c) {
+        this->c = c;
+        return *this;
+    }
+
+    void print() {
+        for (int i = 0; i < this->size; )
+        {
+            std::cout << "DEBUG " << i << ": " << this->m_f[i] << " " << std::endl;
+            i++;
+        }
+    }
+
+    Matrix operator=(float i) {
+        for (auto value : this->c.items)
+        {
+            this->m_f[(value.y * 4 + value.x)] = i;
+        }
+
+        this->print();
+
+        return *this;
     }
 
     friend bool operator==(const Matrix &m1, const Matrix &m2)
     {
+        bool result = true;
 
-        bool result = sizeof(m1) == sizeof(m2);
-
-        for (size_t i = 0; i < sizeof(m1.m_f) / sizeof(m1.m_f[0]); ++i)
+        for (int i = 0; i < m1.size; )
         {
+            std::cout << "DEBUG " << m1.m_f[i] << " " << m2.m_f[i] << std::endl;
             result &= m1.m_f[i] == m2.m_f[i];
-            ++i;
+            i++;
         }
 
         return result;
     }
+
+
     
+    Coordinates c;
 protected:
     static const int size = 16;
     float m_f[size];
+
 };
 
 // End of solution
@@ -234,40 +393,41 @@ void matrix()
     Matrix m;
 
     Matrix m1 = { 0, 0, 0, 0,   0, 0, 0, 0,   0, 0, 0, 0,   0, 0, 0, 0 };
-    assert(m == m1);
+//    assert(m == m1);
 
-//    m[m.y == m.x] = 1.0f;
+    m[m.y == m.x] = 1.0f;
 //    m[(0,0), (1,1), (2,2), (3,3)] = 1.0f;
+//    m.print();
 
     Matrix m2 = { 1, 0, 0, 0,   0, 1, 0, 0,   0, 0, 1, 0,   0, 0, 0, 1 };
 //    assert(m == m2);
 
-//    m[m.y > m.x] = 3.0f;
+    m[m.y > m.x] = 3.0f;
 //    m[(1,0), (2,0), (2,1), (3,0), (3,1), (3,2)] = 3.0f;
 
     Matrix m3 = { 1, 0, 0, 0,   3, 1, 0, 0,   3, 3, 1, 0,   3, 3, 3, 1 };
 //    assert(m == m3);
 
-//    m[m.y < m.x] = 4.0f;
+    m[m.y < m.x] = 4.0f;
 //    m[(0,1), (0,2), (0,3), (1,2), (1,3), (2,3)] = 4.0f;
 
     Matrix m4 = { 1, 4, 4, 4,   3, 1, 4, 4,   3, 3, 1, 4,   3, 3, 3, 1 };
 //    assert(m == m4);
 
-//    m[3_y, 2_x] = 12.0f;
+    m[3_y, 2_x] = 12.0f;
 //    m[(3, 2)] = 12.0f;
 
     Matrix m5 = { 1, 4, 4, 4,   3, 1, 4, 4,   3, 3, 1, 4,   3, 3, 12, 1 };
 //    assert(m == m5);
 
-//    m[3_x, 2_y] = 42.0f;
-//    m[(3, 2)] = 42.0f;
+    m[3_x, 2_y] = 42.0f;
+//    m[(2, 3)] = 42.0f;
 
     Matrix m6 = { 1, 4, 4, 4,   3, 1, 4, 4,   3, 3, 1, 42,   3, 3, 12, 1 };
 //    assert(m == m6);
 
-//    m[m.y == 0] = 2.0f;
-//    m[(0,0), (0,1), (0,2), (0,3)] = 2.0f;
+    m[m.y == 0] = 2.0f;
+//    m[{(0,0), (0,1), (0,2), (0,3)}] = 2.0f;
 
     Matrix m7 = { 2, 2, 2, 2,   3, 1, 4, 4,   3, 3, 1, 42,   3, 3, 12, 1 };
 //    assert(m == m7);
