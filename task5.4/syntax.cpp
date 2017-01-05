@@ -116,14 +116,6 @@ public:
     float m_value;
 };
 
-struct Converter
-{
-    float m_value;
-    
-    operator float() const { return float(m_value); }
-    operator Object() const { return Object{ m_value, true }; }
-};
-
 struct Generator
 {
     static size_t objectInstanceCount;
@@ -280,11 +272,11 @@ struct Matrix
             m_f[i++] = 0;
         }
     }
-    
+
     Matrix(std::initializer_list<float> initializer): x{4,4}, y{4,4}
     {
         assert(initializer.size() == size);
-        
+
         size_t i = 0;
         for (auto value : initializer)
         {
@@ -292,27 +284,16 @@ struct Matrix
         }
     }
 
-    Matrix operator[](Coordinates c) {
+    Matrix& operator[](Coordinates c) {
         this->c = c;
         return *this;
     }
 
-    void print() {
-        for (int i = 0; i < this->size; )
-        {
-            std::cout << "DEBUG " << i << ": " << this->m_f[i] << " " << std::endl;
-            i++;
-        }
-    }
-
-    Matrix operator=(float i) {
+    Matrix& operator=(float i) {
         for (auto value : this->c.items)
         {
             this->m_f[(value.y * 4 + value.x)] = i;
         }
-
-        this->print();
-
         return *this;
     }
 
@@ -322,7 +303,6 @@ struct Matrix
 
         for (int i = 0; i < m1.size; )
         {
-            std::cout << "DEBUG " << m1.m_f[i] << " " << m2.m_f[i] << std::endl;
             result &= m1.m_f[i] == m2.m_f[i];
             i++;
         }
@@ -331,7 +311,7 @@ struct Matrix
     }
 
 
-    
+
     Coordinates c;
 protected:
     static const int size = 16;
@@ -399,48 +379,40 @@ void accounting()
 
 void matrix()
 {
-    // TODO
     Matrix m;
 
     Matrix m1 = { 0, 0, 0, 0,   0, 0, 0, 0,   0, 0, 0, 0,   0, 0, 0, 0 };
-//    assert(m == m1);
+    assert(m == m1);
 
     m[m.y == m.x] = 1.0f;
-//    m[(0,0), (1,1), (2,2), (3,3)] = 1.0f;
-//    m.print();
 
     Matrix m2 = { 1, 0, 0, 0,   0, 1, 0, 0,   0, 0, 1, 0,   0, 0, 0, 1 };
-//    assert(m == m2);
+    assert(m == m2);
 
     m[m.y > m.x] = 3.0f;
-//    m[(1,0), (2,0), (2,1), (3,0), (3,1), (3,2)] = 3.0f;
 
     Matrix m3 = { 1, 0, 0, 0,   3, 1, 0, 0,   3, 3, 1, 0,   3, 3, 3, 1 };
-//    assert(m == m3);
+    assert(m == m3);
 
     m[m.y < m.x] = 4.0f;
-//    m[(0,1), (0,2), (0,3), (1,2), (1,3), (2,3)] = 4.0f;
 
     Matrix m4 = { 1, 4, 4, 4,   3, 1, 4, 4,   3, 3, 1, 4,   3, 3, 3, 1 };
-//    assert(m == m4);
+    assert(m == m4);
 
     m[3_y, 2_x] = 12.0f;
-//    m[(3, 2)] = 12.0f;
 
     Matrix m5 = { 1, 4, 4, 4,   3, 1, 4, 4,   3, 3, 1, 4,   3, 3, 12, 1 };
-//    assert(m == m5);
+    assert(m == m5);
 
     m[3_x, 2_y] = 42.0f;
-//    m[(2, 3)] = 42.0f;
 
     Matrix m6 = { 1, 4, 4, 4,   3, 1, 4, 4,   3, 3, 1, 42,   3, 3, 12, 1 };
-//    assert(m == m6);
+    assert(m == m6);
 
     m[m.y == 0] = 2.0f;
-//    m[{(0,0), (0,1), (0,2), (0,3)}] = 2.0f;
 
     Matrix m7 = { 2, 2, 2, 2,   3, 1, 4, 4,   3, 3, 1, 42,   3, 3, 12, 1 };
-//    assert(m == m7);
+    assert(m == m7);
 }
 
 int main(int argc, char * argv[])
@@ -448,6 +420,6 @@ int main(int argc, char * argv[])
     generator();
     accounting();
     matrix();
-    
+
     return 0;
 }
