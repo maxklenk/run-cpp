@@ -75,10 +75,35 @@ namespace MI {
 }
 
 namespace nonMI {
+
+//    void Hook::onBeforeProcess(const std::string &operation) {
+//    }
+//
+//    void Hook::onAfterProcess(const std::string &operation) {
+//    }
+
+    void LoggerHook::onBeforeProcess(const std::string &operation) {
+        std::cout << "[logged] ";
+    }
+
+
+    void LoggerHook::onAfterProcess(const std::string &operation) {
+        std::cout << " [/logged]";
+    }
+
+    void SecureHook::onBeforeProcess(const std::string &operation) {
+        std::cout << "[secured] ";
+    }
+
+
+    void SecureHook::onAfterProcess(const std::string &operation) {
+        std::cout << " [/secured]";
+    }
+
+
     Transaction::Transaction(const std::string &name)
             : m_name{name} {
     }
-
 
     const std::string &Transaction::name() const {
         return m_name;
@@ -93,11 +118,23 @@ namespace nonMI {
         onAfterProcess(operation);
     }
 
+    void Transaction::addHook(Hook hook) {
+        this->hooks.push_back(&hook);
+    }
 
     void Transaction::onBeforeProcess(const std::string &operation) {
+        for (auto hook:hooks)
+        {
+            // FIXME: libc++abi.dylib: Pure virtual function called!
+            // hook->onBeforeProcess(operation);
+        }
     }
 
 
     void Transaction::onAfterProcess(const std::string &operation) {
+        for (std::vector<Hook *>::reverse_iterator i = hooks.rbegin(); i != hooks.rend(); ++i ) {
+            // FIXME: libc++abi.dylib: Pure virtual function called!
+            // (*i)->onAfterProcess(operation);
+        }
     }
 }
