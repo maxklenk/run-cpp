@@ -33,6 +33,7 @@
 
 # Custom build folder
 _build
+cmake-build-debug
 
 # Mac
 .DS_Store
