@@ -49,7 +49,7 @@ public:
     virtual int weight() override
     {
         int weight = 0;
-        for (auto &child: _children)
+        for (const auto &child: _children)
         {
             weight += child->weight();
         }
@@ -96,11 +96,6 @@ public:
     {
         stream << std::string(indention, ' ') << std::setw(3) << std::left << _id << " -> " << node->getId()
                << std::endl;
-    }
-
-    virtual ~Proxy()
-    {
-        // delete something...?
     }
 
 };
