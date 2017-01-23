@@ -2,7 +2,9 @@
 #include <iostream>
 //#include <iomanip>
 
-
+/**
+ * Abstract base class for all kinds of node objects.
+ */
 class Node
 {
 protected:
@@ -23,7 +25,7 @@ public:
 
     virtual void print(std::ostream &stream, int indention = 0)
     {
-        stream << std::string(indention, ' ') << _id << std::endl;
+        stream << std::string(indention, ' ') << getId() << std::endl;
         for (const auto &child: Node::_children)
         {
             child->print(stream, indention + 2);
@@ -39,7 +41,9 @@ public:
     }
 };
 
-
+/**
+ * A container node having zero or more child nodes
+ */
 class Group : public Node
 {
 public:
@@ -57,6 +61,9 @@ public:
     }
 };
 
+/**
+ * A leaf node, specifying a weight
+ */
 class Leaf : public Node
 {
 private:
@@ -77,11 +84,14 @@ public:
         std::cout.fill(' ');
         stream << std::string(indention, ' ')
                //<< std::setw(3) << std::left << _id
-               << _id
+               << getId()
                << " : " << weight() << std::endl;
     }
 };
 
+/**
+ * A node delegating to another subgraph
+ */
 class Proxy : public Node
 {
 private:
@@ -99,9 +109,8 @@ public:
     {
         stream << std::string(indention, ' ')
                //<< std::setw(3) << std::left << _id
-               << _id
+               << getId()
                << " -> " << node->getId()
                << std::endl;
     }
-
 };
