@@ -4,7 +4,7 @@ project(graph)
 set(CMAKE_CXX_STANDARD 14)
 
 set(SOURCE_FILES
-    Graph.h
-    main.cpp)
+        Graph.h
+        main.cpp)
 
 add_executable(graph ${SOURCE_FILES})

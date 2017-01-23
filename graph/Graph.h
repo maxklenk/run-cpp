@@ -1,6 +1,6 @@
 #include <vector>
 #include <iostream>
-#include <iomanip>
+//#include <iomanip>
 
 
 class Node
@@ -26,7 +26,7 @@ public:
         stream << std::string(indention, ' ') << _id << std::endl;
         for (const auto &child: Node::_children)
         {
-            child->print(stream, indention + 1);
+            child->print(stream, indention + 2);
         }
     }
 
@@ -75,7 +75,10 @@ public:
     virtual void print(std::ostream &stream, int indention = 0)
     {
         std::cout.fill(' ');
-        stream << std::string(indention, ' ') << std::setw(3) << std::left << _id << ": " << weight() << std::endl;
+        stream << std::string(indention, ' ')
+               //<< std::setw(3) << std::left << _id
+               << _id
+               << " : " << weight() << std::endl;
     }
 };
 
@@ -94,7 +97,10 @@ public:
 
     void print(std::ostream &stream, int indention = 0) override
     {
-        stream << std::string(indention, ' ') << std::setw(3) << std::left << _id << " -> " << node->getId()
+        stream << std::string(indention, ' ')
+               //<< std::setw(3) << std::left << _id
+               << _id
+               << " -> " << node->getId()
                << std::endl;
     }
 
