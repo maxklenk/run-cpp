@@ -1,6 +1,7 @@
-
-
 #include <vector>
+#include <iostream>
+#include <iomanip>
+
 
 class Node
 {
@@ -11,25 +12,27 @@ public:
 
     Node(int id) : _id(id) {}
 
-    void appendNode(std::unique_ptr<Node> child)
+    void appendNode(std::unique_ptr<Node> &&node)
     {
-        _children.push_back(std::move(child));
+        _children.push_back(std::move(node));
     }
 
     virtual int weight()=0;
 
-    const void print(std::ostream &stream, int indention = 0)
+    int getId() { return _id; }
+
+    virtual void print(std::ostream &stream, int indention = 0)
     {
         stream << std::string(indention, ' ') << _id << std::endl;
         for (const auto &child: Node::_children)
         {
-            child->print(stream, indention + 4);
+            child->print(stream, indention + 1);
         }
     }
 
     virtual ~Node()
     {
-        for (auto &child: _children)
+        for (auto &&child: _children)
         {
             child.reset();
         }
@@ -40,14 +43,6 @@ public:
 class Group : public Node
 {
 public:
-
-    Group(Group &group) : Node(group._id)
-    {
-        for (const auto &child:group._children)
-        {
-            this->_children.push_back(std::move(child));
-        }
-    }
 
     Group(int id) : Node(id) {};
 
@@ -76,4 +71,36 @@ public:
     {
         return this->_weight;
     }
+
+    virtual void print(std::ostream &stream, int indention = 0)
+    {
+        std::cout.fill(' ');
+        stream << std::string(indention, ' ') << std::setw(3) << std::left << _id << ": " << weight() << std::endl;
+    }
+};
+
+class Proxy : public Node
+{
+private:
+    Node *node;
+    using Node::appendNode;
+public:
+    Proxy(int id, Node *node) : Node(id), node(node) {}
+
+    virtual int weight() override
+    {
+        return node->weight();
+    }
+
+    void print(std::ostream &stream, int indention = 0) override
+    {
+        stream << std::string(indention, ' ') << std::setw(3) << std::left << _id << " -> " << node->getId()
+               << std::endl;
+    }
+
+    virtual ~Proxy()
+    {
+        // delete something...?
+    }
+
 };
