@@ -135,7 +135,7 @@ namespace nonMI
         onAfterProcess(operation);
     }
 
-    void Transaction::addHook(Hook *hook)
+    void Transaction::addHook(Hook* hook)
     {
         this->hooks.push_back(hook);
     }

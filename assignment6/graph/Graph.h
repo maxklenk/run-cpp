@@ -79,7 +79,7 @@ public:
         return this->_weight;
     }
 
-    virtual void print(std::ostream &stream, int indention = 0)
+    virtual void print(std::ostream &stream, int indention = 0) override
     {
         std::cout.fill(' ');
         stream << std::string(indention, ' ')

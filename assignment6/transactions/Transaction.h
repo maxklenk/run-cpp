@@ -119,7 +119,7 @@ namespace nonMI
 
         void process(const std::string &operation);
 
-        void addHook(Hook *hook);
+        void addHook(Hook* hook);
 
 
     protected:
@@ -130,6 +130,6 @@ namespace nonMI
 
     private:
         std::string m_name;
-        std::vector<Hook *> hooks;
+        std::vector<Hook*> hooks;
     };
 }
