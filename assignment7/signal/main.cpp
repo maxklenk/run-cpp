@@ -25,13 +25,14 @@ class ErrorOutput
 public:
     ErrorOutput() = default;
 
-    void print(int errorCode, const std::string & errorMessage)
-    {
-        std::cout << "member function fired" << std::endl;
-        std::cout << "Errorcode: " << errorCode << std::endl;
-        std::cout << "Message: " << errorMessage << std::endl;
-    }
+    void print(int errorCode, const std::string & errorMessage);
 };
+
+void ErrorOutput::print(int errorCode, const std::string &errorMessage) {
+    std::cout << "member function fired" << std::endl;
+    std::cout << "Errorcode: " << errorCode << std::endl;
+    std::cout << "Message: " << errorMessage << std::endl;
+}
 
 void f()
 {
