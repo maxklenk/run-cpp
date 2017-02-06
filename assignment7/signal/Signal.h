@@ -15,8 +15,14 @@ public:
 
     // for member functions applied to objects
     template <typename T, typename R>
-    void connect(T & obj, R (T::*mf)(Args...))
+    void connect(T & obj, R T::* mf)
     {
+//        auto func = [&obj, mf](Args... args) {
+//            auto f = std::bind(mf, obj, args);
+//        };
+//
+//        this->functions.push_back(func);
+
         // TODO: store member function
 //        this->functions.push_back((obj).*mf);
 //        auto func = std::bind(mf, obj);
