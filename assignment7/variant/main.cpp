@@ -44,9 +44,9 @@ void basicTest()
     std::cout << "Basic test: success" << std::endl;
 }
 
-//
-//void comparisonTest()
-//{
+
+void comparisonTest()
+{
 //    auto v1 = Variant(1);
 //    auto v2 = Variant(1);
 //    auto v3 = Variant(2);
@@ -59,11 +59,11 @@ void basicTest()
 //    assert(!(v1 == v5));
 //
 //    std::cout << "Comparison test: success" << std::endl;
-//}
-//
-//
-//void conversionTest()
-//{
+}
+
+
+void conversionTest()
+{
 //    auto v1 = Variant(1);
 //    auto f1 = v1.get<unsigned long>();
 //    assert(f1 == 1ul);
@@ -79,11 +79,11 @@ void basicTest()
 //    assert(f2 == 3.14f);
 //
 //    std::cout << "Conversion test: success" << std::endl;
-//}
-//
-//
-//void stringTest()
-//{
+}
+
+
+void stringTest()
+{
 //    auto v1 = Variant(4);
 //    assert(v1.toString() == "4");
 //
@@ -107,11 +107,11 @@ void basicTest()
 //    assert(v4.get<double>() == 42.123);
 //
 //    std::cout << "String test: success" << std::endl;
-//}
-//
-//
-//void reassignmentTest()
-//{
+}
+
+
+void reassignmentTest()
+{
 //    auto v1 = Variant(4);
 //    assert(v1.get<int>() == 4);
 //
@@ -127,11 +127,11 @@ void basicTest()
 //    assert(v1.get<std::string>() == "foobar");
 //
 //    std::cout << "Reassignment test: success" << std::endl;
-//}
-//
-//
-//void typeQueryTest()
-//{
+}
+
+
+void typeQueryTest()
+{
 //    // TODO: implement the pseudo code statments using the closest possible solution
 //
 //    auto v1 = Variant(123);
@@ -156,11 +156,11 @@ void basicTest()
 //    */
 //
 //    std::cout << "Type query test: success" << std::endl;
-//}
-//
-//
-//void copyMoveTest()
-//{
+}
+
+
+void copyMoveTest()
+{
 //    auto v1 = Variant("foobar"s);
 //    auto v2 = Variant(v1);
 //
@@ -184,7 +184,7 @@ void basicTest()
 //    assert(v3.get<int>() == 4);
 //
 //    std::cout << "Copy/move test: success" << std::endl;
-//}
+}
 
 
 int main(int argc, char * argv[])
@@ -192,10 +192,10 @@ int main(int argc, char * argv[])
     basicTest();
 
     // Extended task: comment in at least four of the following six tests.
-    //comparisonTest();
-    //conversionTest();
-    //stringTest();
-    //reassignmentTest();
-    //typeQueryTest();
-    //copyMoveTest();
+    comparisonTest();
+    conversionTest();
+    stringTest();
+    reassignmentTest();
+    typeQueryTest();
+    copyMoveTest();
 }
