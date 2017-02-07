@@ -1,25 +1,46 @@
 
-//template<typename T, template<typename CT>>
-//T collect(std::initializer_list
-//        list,
-//        func convert
-//)
-//{
-//    Collection result = Collection();
-//    for (auto item: list)
-//    {
-//        result.add(convert(item));
-//    }
-//    return result;
-//}
+#include <algorithm>
 
-template<typename T, typename V, typename Func, template<typename, typename> class C = std::vector>
-C<T, std::allocator<T>> collect(const C<V,std::allocator<V>> collection, Func &&convert)
-{
-    auto result = C<T,std::allocator<T>>();
-    for (V &value : collection)
-    {
-        result.push_back(convert(value)); // push_back only for vector
-    }
-    return result;
+using namespace std;
+
+// Numeric Vector to Vector
+template<typename ResultType, typename CollectionType, typename TransformFunction>
+enable_if_t<is_arithmetic<ResultType>::value, vector<ResultType>>
+collect(const CollectionType &collection, TransformFunction function) {
+    vector<ResultType> output(collection.size());
+    transform(collection.begin(), collection.end(), output.begin(), function);
+    return output;
 };
+
+// Vectors: has method 'pop_back'
+template<typename ResultType, typename CollectionType, typename TransformFunction>
+enable_if_t<std::is_member_function_pointer<decltype(&ResultType::pop_back)>::value, ResultType>
+collect(const CollectionType &collection, TransformFunction function) {
+    ResultType output(collection.size());
+    transform(collection.begin(), collection.end(), output.begin(), function);
+    return output;
+};
+
+
+// Maps: has method 'key_comp'
+template<typename ResultType, typename CollectionType, typename TransformFunction>
+enable_if_t<std::is_member_function_pointer<decltype(&ResultType::key_comp)>::value, ResultType>
+collect(const CollectionType &collection, TransformFunction function) {
+    ResultType output;
+    for (auto entry : collection) {
+        output.emplace(function(entry));
+    }
+    return output;
+};
+
+// Unordered_Maps/Unordered_Sets: has method 'hash_function'
+template<typename ResultType, typename CollectionType, typename TransformFunction>
+enable_if_t<std::is_member_function_pointer<decltype(&ResultType::hash_function)>::value, ResultType>
+collect(const CollectionType &collection, TransformFunction function) {
+    ResultType output;
+    for (auto entry : collection) {
+        output.emplace(function(entry));
+    }
+    return output;
+};
+
