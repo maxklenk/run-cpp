@@ -1,39 +1,36 @@
 
 #include "ISBN.h"
-
+#include <stdexcept>
 
 //
 // Begin legacy template solution - re-engineer this using constexpr
 //
 
-template <bool Condition, unsigned int, unsigned int>
+template<bool Condition, unsigned int, unsigned int>
 struct selection;
 
-template <unsigned int TrueValue, unsigned int FalseValue>
+template<unsigned int TrueValue, unsigned int FalseValue>
 struct selection<true, TrueValue, FalseValue> {
     static const unsigned int value = TrueValue;
 };
 
-template <unsigned int TrueValue, unsigned int FalseValue>
+template<unsigned int TrueValue, unsigned int FalseValue>
 struct selection<false, TrueValue, FalseValue> {
     static const unsigned int value = FalseValue;
 };
 
-template <unsigned int Number, char NextDigit>
-struct appendDigit
-{
+template<unsigned int Number, char NextDigit>
+struct appendDigit {
     static const unsigned int value = Number * 10 + (NextDigit - '0');
 };
 
-template <char Digit>
-struct isDigit
-{
+template<char Digit>
+struct isDigit {
     static const bool value = (Digit >= '0' && Digit <= '9');
 };
 
 template<unsigned int prefix, unsigned int group, unsigned int registrant, unsigned int publication, unsigned int checksum>
-struct ISBNResult
-{
+struct ISBNResult {
     enum {
         Prefix = prefix,
         Group = group,
@@ -47,43 +44,43 @@ template<unsigned int prefix, unsigned int group, unsigned int registrant, unsig
 struct ISBNParser;
 
 template<unsigned int prefix, unsigned int group, unsigned int registrant, unsigned int publication, unsigned int checksum>
-struct ISBNParser<prefix, group, registrant, publication, checksum, 4> : public ISBNResult<prefix, group, registrant, publication, checksum> {};
-    
+struct ISBNParser<prefix, group, registrant, publication, checksum, 4>
+        : public ISBNResult<prefix, group, registrant, publication, checksum> {
+};
+
 template<unsigned int prefix, unsigned int group, unsigned int registrant, unsigned int publication, unsigned int checksum>
-struct ISBNParser<prefix, group, registrant, publication, checksum, 3> : public ISBNResult<0, prefix, group, registrant, publication> {};
+struct ISBNParser<prefix, group, registrant, publication, checksum, 3>
+        : public ISBNResult<0, prefix, group, registrant, publication> {
+};
 
 template<unsigned int prefix, unsigned int group, unsigned int registrant, unsigned int publication, unsigned int checksum, unsigned int state, char Current, char... Chars>
 struct ISBNParser<prefix, group, registrant, publication, checksum, state, Current, Chars...> : public ISBNParser<
-    selection<state == 0 && isDigit<Current>::value, appendDigit<prefix, Current>::value, prefix>::value,
-    selection<state == 1 && isDigit<Current>::value, appendDigit<group, Current>::value, group>::value,
-    selection<state == 2 && isDigit<Current>::value, appendDigit<registrant, Current>::value, registrant>::value,
-    selection<state == 3 && isDigit<Current>::value, appendDigit<publication, Current>::value, publication>::value,
-    selection<state == 4 && isDigit<Current>::value, appendDigit<checksum, Current>::value, checksum>::value,
-    selection<Current == '\'', state+1, state>::value,
-    Chars...
-> {};
-    
+        selection<state == 0 && isDigit<Current>::value, appendDigit<prefix, Current>::value, prefix>::value,
+        selection<state == 1 && isDigit<Current>::value, appendDigit<group, Current>::value, group>::value,
+        selection<state == 2 && isDigit<Current>::value, appendDigit<registrant, Current>::value, registrant>::value,
+        selection<state == 3 && isDigit<Current>::value, appendDigit<publication, Current>::value, publication>::value,
+        selection<state == 4 && isDigit<Current>::value, appendDigit<checksum, Current>::value, checksum>::value,
+        selection<Current == '\'', state + 1, state>::value,
+        Chars...
+> {
+};
+
 template<unsigned int prefix, unsigned int group, unsigned int registrant, unsigned int publication, unsigned int checksum>
-struct ISBNInstantiator
-{
-    constexpr static ISBN create()
-    {
+struct ISBNInstantiator {
+    constexpr static ISBN create() {
         return ISBN(prefix, group, registrant, publication, checksum);
     }
 };
 
 template<unsigned int group, unsigned int registrant, unsigned int publication, unsigned int checksum>
-struct ISBNInstantiator<0, group, registrant, publication, checksum>
-{
-    constexpr static ISBN create()
-    {
+struct ISBNInstantiator<0, group, registrant, publication, checksum> {
+    constexpr static ISBN create() {
         return ISBN(group, registrant, publication, checksum);
     }
 };
 
-template <char... Chars>
-constexpr ISBN operator "" _isbn()
-{
+template<char... Chars>
+constexpr ISBN operator "" _isbn() {
     using Result = ISBNParser<0, 0, 0, 0, 0, 0, Chars...>;
     return ISBNInstantiator<Result::Prefix, Result::Group, Result::Registrant, Result::Publication, Result::Checksum>::create();
 }
@@ -95,23 +92,67 @@ constexpr ISBN operator "" _isbn()
 
 
 
+//
+// Begin new solution using constexpr
+//
+
+constexpr int ISBN_10_SIZE = 13;
+//constexpr int ISBN_13_SIZE = 17;
+
+constexpr unsigned int parseSection(const char *input, unsigned int from, unsigned int to) {
+    unsigned int num = 0;
+
+    for (unsigned int i = from; i < to; ++i) {
+        num = num * 10 + ((unsigned int) input[i]) - 48;
+    }
+
+    return num;
+}
+
+constexpr ISBN operator "" _isbn(const char *isbn, size_t size) {
+    if (size == ISBN_10_SIZE) {
+        return ISBN(
+                parseSection(isbn, 0, 4),
+                parseSection(isbn, 5, 8),
+                parseSection(isbn, 9, 11),
+                parseSection(isbn, 12, 13)
+        );
+    } else {
+        return ISBN(
+                parseSection(isbn, 0, 3),
+                parseSection(isbn, 4, 8),
+                parseSection(isbn, 9, 12),
+                parseSection(isbn, 13, 15),
+                parseSection(isbn, 16, 17)
+        );
+    }
+}
+
+
+//
+// End new solution
+//
+
+
 
 //
 // Test case
 // 
 
-int main(int argc, char * argv[])
-{
+int main(int argc, char *argv[]) {
     // using template solution, comment this out...
-    constexpr auto isbn13 = 978'4873'113'68'5_isbn;
-    constexpr auto isbn10 = 4873'113'68'5_isbn;
+    constexpr auto isbn13_legacy = 978'4873'113'68'5_isbn;
+    constexpr auto isbn10_legacy = 4873'113'68'5_isbn;
 
-    // ... and replace with this
-    //constexpr auto isbn13 = "978'4873'113'68'5"_isbn;
-    //constexpr auto isbn10 = "4873'113'68'5"_isbn;
-    
+    isbn13_legacy.print();
+    isbn10_legacy.print();
+
+//     ... and replace with this
+    constexpr auto isbn13 = "978'4873'113'68'5"_isbn;
+    constexpr auto isbn10 = "4873'113'68'5"_isbn;
+
     isbn13.print();
     isbn10.print();
-    
+
     return 0;
 }
