@@ -19,6 +19,13 @@ int main(int argc, char * argv[])
     const auto doubleSet = std::set<double>{ 0.0, 3.2, 4.1, 5.7 };
     
     // You can reduce the number of template arguments if your solution is able to deduce them
+//    std::vector<float> vfc_1              = collect<std::vector>            (intInitList, [](int v) { return static_cast<float>(v); });
+//
+//    std::vector<float> vfc_2              = collect<std::vector>            (intInitList, [](int v) { return static_cast<float>(v); });
+//
+//    auto vfc_3              = collect            (intInitList, [](int v) { return static_cast<float>(v); });
+
+
     std::vector<float> vfc              = collect<std::vector<float>>            (intInitList, [](int v) { return static_cast<float>(v); });
     std::vector<float> vfe              = collect<float>                         (intVector,   [](int v) { return static_cast<float>(v); });
     std::list<float> lfc                = collect<std::list<float>>              (intVector,   [](int v) { return static_cast<float>(v); });
